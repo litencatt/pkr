@@ -143,9 +143,16 @@ func (cli *PokerCLI) Run() error {
 		roundResultStats := cli.service.GetRoundStats()
 		if cli.service.IsRoundWin() {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
-			fmt.Println("You win!")
+			fmt.Println("")
 
-			cli.service.NextBlind()
+			prompt := &survey.Select{
+				Message: "You win this round!",
+				Options: []string{"Next"},
+			}
+			if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
+				fmt.Println("interrupted")
+				os.Exit(0)
+			}
 			continue
 		}
 
