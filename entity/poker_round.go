@@ -12,14 +12,15 @@ type PokerRoundStats struct {
 }
 
 type PokerRound struct {
-	Deck          Deck
-	TotalScore    int
-	HandCards     PokerHandCard
-	RemainCards   []Trump
-	SelectedCards []Trump
-	Hands         int
-	Discards      int
-	ScoreAtLeast  int
+	Deck               Deck
+	TotalScore         int
+	HandCards          PokerHandCard
+	RemainCards        []Trump
+	SelectedCards      []Trump
+	Hands              int
+	Discards           int
+	ScoreAtLeast       int
+	BeforeSelectAction string
 }
 
 func (p *PokerRound) DrawCard(drawNum int) []Trump {

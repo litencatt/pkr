@@ -23,6 +23,7 @@ type PokerService interface {
 	GetRemainCardString() []string
 	GetRoundStats() *entity.PokerRoundStats
 	GetEnableActions() []string
+	SetSelectAction(string)
 }
 
 type pokerService struct {
@@ -42,7 +43,15 @@ type PokerServiceConfig struct {
 }
 
 func (s *pokerService) GetNextDrawNum() int {
-	return s.runInfo.DefaultDeal
+	if s.runInfo.Round.BeforeSelectAction == "" {
+		return s.runInfo.DefaultDeal
+	}
+
+	if s.runInfo.Round.BeforeSelectAction == "Cancel" {
+		return 0
+	}
+
+	return len(s.runInfo.Round.SelectedCards)
 }
 
 func (s *pokerService) GetChipAndMult(handType entity.HandType, level int) (int, int) {
@@ -156,6 +165,10 @@ func (s *pokerService) NextAnte() error {
 
 func (s *pokerService) GetRoundStats() *entity.PokerRoundStats {
 	return s.runInfo.Round.GetRoundStats()
+}
+
+func (s *pokerService) SetSelectAction(action string) {
+	s.runInfo.Round.BeforeSelectAction = action
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig

@@ -40,8 +40,7 @@ func (cli *PokerCLI) Run() error {
 	cli.service.StartRound(ScoreAtLeast)
 
 	var selectCardNum int
-	var nextDrawNum int
-	var selectActioin string
+	var selectAction string
 
 	for {
 		roundStats := cli.service.GetRoundStats()
@@ -51,16 +50,8 @@ func (cli *PokerCLI) Run() error {
 		fmt.Println()
 
 		// Draw cards
-		if selectActioin == "Cancel" {
-			nextDrawNum = 0
-		} else if selectCardNum == 0 {
-			nextDrawNum = cli.service.GetNextDrawNum()
-		} else {
-			// Draw cards num is same as the last selected cards num
-			nextDrawNum = selectCardNum
-		}
-
-		if err := cli.service.DrawCard(nextDrawNum); err != nil {
+		drawNum := cli.service.GetNextDrawNum()
+		if err := cli.service.DrawCard(drawNum); err != nil {
 			return err
 		}
 
@@ -99,20 +90,21 @@ func (cli *PokerCLI) Run() error {
 			Message: "Select action:",
 			Options: actions,
 		}
-		if err := survey.AskOne(prompt, &selectActioin); err == terminal.InterruptErr {
+		if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
 			fmt.Println("interrupted")
 			os.Exit(0)
 		}
 
-		if selectActioin == "Discard" {
+		cli.service.SetSelectAction(selectAction)
+		if selectAction == "Discard" {
 			cli.service.DiscardHand()
 			continue
 		}
-		if selectActioin == "Cancel" {
+		if selectAction == "Cancel" {
 			cli.service.CancelHand()
 			continue
 		}
-		if selectActioin == "Play" {
+		if selectAction == "Play" {
 			r, err := cli.service.PlayHand()
 			if err != nil {
 				return err
