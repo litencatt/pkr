@@ -7,16 +7,16 @@ import (
 )
 
 type PokerService interface {
-	StartRound(int) error
+	StartRound() error
 	DrawCard(int) error
 	SelectCards([]string) error
 	PlayHand() (entity.PokerHandStats, error)
 	DiscardHand() error
 	CancelHand() error
-	NextRound() error
 	NextAnte() error
-	GetCurrentAnte() int
-	GetCurrentBlind() float64
+	NextBlind() error
+	GetCurrentAnteAmount() int
+	GetCurrentBlindMulti() float64
 	GetNextDrawNum() int
 	GetChipAndMult(entity.HandType, int) (int, int)
 	GetHandCardString() []string
@@ -59,8 +59,8 @@ func (s *pokerService) GetChipAndMult(handType entity.HandType, level int) (int,
 	return s.runInfo.PokerHands.GetChipAndMult(handType, level)
 }
 
-func (s *pokerService) StartRound(ScoreAtLeast int) error {
-	scoreAtLeast := int(float64(s.runInfo.Ante) * s.runInfo.Blind)
+func (s *pokerService) StartRound() error {
+	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
 	s.runInfo.Round = &entity.PokerRound{
 		Deck:         s.runInfo.Deck,
 		TotalScore:   0,
@@ -87,12 +87,21 @@ func (s *pokerService) DrawCard(num int) error {
 	return nil
 }
 
-func (s *pokerService) GetCurrentAnte() int {
-	return s.runInfo.Ante
+func (s *pokerService) GetCurrentAnteAmount() int {
+	return entity.AnteAmounts[s.runInfo.AnteIndex]
 }
 
-func (s *pokerService) GetCurrentBlind() float64 {
-	return s.runInfo.Blind
+func (s *pokerService) NextAnte() error {
+	return s.runInfo.NextAnte()
+}
+
+// next blind
+func (s *pokerService) NextBlind() error {
+	return s.runInfo.NextBlind()
+}
+
+func (s *pokerService) GetCurrentBlindMulti() float64 {
+	return entity.BlindMultis[s.runInfo.BlindIndex]
 }
 
 func (s *pokerService) GetEnableActions() []string {
@@ -154,14 +163,6 @@ func (s *pokerService) GetHandCardString() []string {
 
 func (s *pokerService) GetRemainCardString() []string {
 	return s.runInfo.Round.RemainCardString()
-}
-
-func (s *pokerService) NextRound() error {
-	return nil
-}
-
-func (s *pokerService) NextAnte() error {
-	return nil
 }
 
 func (s *pokerService) GetRoundStats() *entity.PokerRoundStats {

@@ -28,19 +28,18 @@ func NewPokerCLI() *PokerCLI {
 }
 
 func (cli *PokerCLI) Run() error {
-	ante := cli.service.GetCurrentAnte()
-	blind := cli.service.GetCurrentBlind()
-	ScoreAtLeast := int(float64(ante) * blind)
+	fmt.Println("*********************")
+	fmt.Println("* Welcome to Poker! *")
+	fmt.Println("*********************")
 
-	fmt.Println("Welcome to Poker!")
 	fmt.Println()
 	fmt.Printf("Round start\n")
-	fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
-	fmt.Printf("Score at least: %d\n", ScoreAtLeast)
-	cli.service.StartRound(ScoreAtLeast)
 
-	var selectCardNum int
-	var selectAction string
+	ante := cli.service.GetCurrentAnteAmount()
+	blind := cli.service.GetCurrentBlindMulti()
+	fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
+
+	cli.service.StartRound()
 
 	for {
 		roundStats := cli.service.GetRoundStats()
@@ -69,7 +68,7 @@ func (cli *PokerCLI) Run() error {
 				os.Exit(0)
 			}
 
-			selectCardNum = len(selectCards)
+			selectCardNum := len(selectCards)
 			if selectCardNum <= 5 {
 				break
 			}
@@ -83,6 +82,7 @@ func (cli *PokerCLI) Run() error {
 		fmt.Println()
 
 		// Play or Discard or Cancel
+		var selectAction string
 		actions := cli.service.GetEnableActions()
 		prompt := &survey.Select{
 			Message: "Select action:",
@@ -132,14 +132,15 @@ func (cli *PokerCLI) Run() error {
 		if cli.service.IsRoundWin() {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
 			fmt.Println("You win!")
-			break
+
+			cli.service.NextBlind()
+			continue
 		}
 
-		if roundResultStats.Hands > 0 {
-			continue
-		} else {
+		if roundResultStats.Hands == 0 {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
 			fmt.Println("You lose!")
+			break
 		}
 
 	}

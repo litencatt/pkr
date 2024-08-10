@@ -1,6 +1,6 @@
 package entity
 
-var Antes = []int{
+var AnteAmounts = []int{
 	300,
 	800,
 	2800,
@@ -20,8 +20,7 @@ var Antes = []int{
 	8600,
 }
 
-// Multi
-var Blinds = []float64{
+var BlindMultis = []float64{
 	1.0,
 	1.5,
 	2.0,
@@ -29,24 +28,52 @@ var Blinds = []float64{
 
 type RunInfo struct {
 	DefaultDeal int
-	Ante        int
-	Blind       float64
+	AnteIndex   int
+	BlindIndex  int
 	Deck        Deck
 	PokerHands  *PokerHands
 	Hands       int
 	Discards    int
+	Rounds      int
 	Round       *PokerRound
 }
 
 func NewRunInfo() *RunInfo {
 	return &RunInfo{
 		DefaultDeal: 8,
-		Ante:        Antes[0],
-		Blind:       Blinds[0],
+		AnteIndex:   0,
+		BlindIndex:  0,
 		Deck:        NewDeck(),
 		PokerHands:  NewPokerHands(),
 		Hands:       4,
 		Discards:    3,
+		Rounds:      1,
 		Round:       nil,
 	}
+}
+
+func (r *RunInfo) NextAnte() error {
+	r.AnteIndex += 1
+	return nil
+}
+
+func (r *RunInfo) NextBlind() error {
+	r.BlindIndex += 1
+	if r.BlindIndex >= len(BlindMultis) {
+		r.BlindIndex = 0
+
+		r.NextRound()
+		r.NextAnte()
+	}
+	return nil
+}
+
+func (r *RunInfo) NextRound() error {
+	r.Rounds += 1
+	return nil
+}
+
+func (r *RunInfo) ResetBlind() error {
+	r.BlindIndex = 0
+	return nil
 }
