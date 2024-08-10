@@ -104,7 +104,6 @@ func (cli *PokerCLI) Run() error {
 			os.Exit(0)
 		}
 
-		// TODO: add cancel action
 		if selectActioin == "Discard" {
 			cli.service.DiscardHand()
 			continue
