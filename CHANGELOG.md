@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.0.6](https://github.com/litencatt/pkr/compare/v0.0.5...v0.0.6) - 2024-08-10
+- Replace to PokerService instance by @litencatt in https://github.com/litencatt/pkr/pull/20
+- Add cancel actionn by @litencatt in https://github.com/litencatt/pkr/pull/22
+- Next round with poker service by @litencatt in https://github.com/litencatt/pkr/pull/23
+- Refactor poker structs by @litencatt in https://github.com/litencatt/pkr/pull/24
+
 ## [v0.0.5](https://github.com/litencatt/pkr/compare/v0.0.4...v0.0.5) - 2024-08-04
 - Fix dev settings by @litencatt in https://github.com/litencatt/pkr/pull/15
 
