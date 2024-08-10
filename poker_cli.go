@@ -76,8 +76,6 @@ func (cli *PokerCLI) Run() error {
 			fmt.Println("Please select less than 5 cards")
 			fmt.Println()
 		}
-
-		cli.service.SelectCards(selectCards)
 		fmt.Print("[Selected cards]\n")
 		for _, card := range selectCards {
 			fmt.Println(card)
@@ -95,6 +93,7 @@ func (cli *PokerCLI) Run() error {
 			os.Exit(0)
 		}
 
+		cli.service.SelectCards(selectCards)
 		cli.service.SetSelectAction(selectAction)
 		if selectAction == "Discard" {
 			if err := cli.service.DiscardHand(); err != nil {
