@@ -111,7 +111,7 @@ func (cli *PokerCLI) Run() error {
 		}
 
 		cli.service.SelectCards(selectCards)
-		cli.service.SetSelectAction(selectAction)
+		cli.service.SetAction(selectAction)
 		if selectAction == "Discard" {
 			if err := cli.service.DiscardHand(); err != nil {
 				return err
