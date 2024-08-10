@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -14,7 +15,7 @@ type PokerRoundStats struct {
 type PokerRound struct {
 	Deck               Deck
 	TotalScore         int
-	HandCards          PokerHandCard
+	HandCards          []Trump
 	RemainCards        []Trump
 	SelectedCards      []Trump
 	Hands              int
@@ -27,7 +28,7 @@ func NewPokerRound(deck Deck, hands, discards, scoreAtLeast int) *PokerRound {
 	return &PokerRound{
 		Deck:          deck,
 		TotalScore:    0,
-		HandCards:     PokerHandCard{},
+		HandCards:     nil,
 		RemainCards:   nil,
 		SelectedCards: nil,
 		Hands:         hands,
@@ -36,27 +37,34 @@ func NewPokerRound(deck Deck, hands, discards, scoreAtLeast int) *PokerRound {
 	}
 }
 
+func SortTrumps(trumps []Trump) {
+	sort.Slice(trumps, func(i, j int) bool {
+		return trumps[i].GetSortOrder() < trumps[j].GetSortOrder()
+	})
+}
+
 func (p *PokerRound) DrawCard(drawNum int) []Trump {
 	if drawNum == 0 {
 		return nil
 	}
 
 	// Remain cards
-	p.HandCards.Trumps = nil
-	p.HandCards.Trumps = append(p.HandCards.Trumps, p.RemainCards...)
+	p.HandCards = nil
+	p.HandCards = append(p.HandCards, p.RemainCards...)
 
 	// Draw cards and append to hand
 	drawCards := p.Deck.Draw(drawNum)
-	p.HandCards.Trumps = append(p.HandCards.Trumps, drawCards...)
+	p.HandCards = append(p.HandCards, drawCards...)
 
-	p.HandCards.Sort()
+	// Sort hand cards
+	SortTrumps(p.HandCards)
 
 	return drawCards
 }
 
 func (p *PokerRound) HandCardString() []string {
 	var cards []string
-	for _, card := range p.HandCards.Trumps {
+	for _, card := range p.HandCards {
 		cards = append(cards, card.String())
 	}
 	return cards
@@ -78,7 +86,7 @@ func (p *PokerRound) SetSelectCards(cards []string) {
 		rank := strings.Split(card, " of ")[0]
 		suit := strings.Split(card, " of ")[1]
 		// Find the card from hand
-		for _, t := range p.HandCards.Trumps {
+		for _, t := range p.HandCards {
 			if string(t.Rank) == rank && string(t.Suit) == suit {
 				selectCards = append(selectCards, t)
 				break
@@ -89,7 +97,7 @@ func (p *PokerRound) SetSelectCards(cards []string) {
 
 	// Calc the RemainCards cards
 	var RemainCardsCards []Trump
-	for _, card := range p.HandCards.Trumps {
+	for _, card := range p.HandCards {
 		if !Contains(selectCards, card) {
 			RemainCardsCards = append(RemainCardsCards, card)
 		}
