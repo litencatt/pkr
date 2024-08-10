@@ -34,10 +34,7 @@ type RunInfo struct {
 	BlindIndex      int
 	Deck            Deck
 	PokerHands      *PokerHands
-	Hands           int
-	Discards        int
 	Rounds          int
-	Round           *PokerRound
 	StartNext       bool
 }
 
@@ -46,12 +43,9 @@ func NewRunInfo() *RunInfo {
 		DefaultDeal:     8,
 		DefaultHands:    4,
 		DefaultDiscards: 3,
-		Hands:           4,
-		Discards:        3,
 		Deck:            NewDeck(),
 		PokerHands:      NewPokerHands(),
 		Rounds:          1,
-		Round:           nil,
 		StartNext:       true,
 		AnteIndex:       0,
 		BlindIndex:      0,
