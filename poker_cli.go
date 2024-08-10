@@ -97,7 +97,9 @@ func (cli *PokerCLI) Run() error {
 
 		cli.service.SetSelectAction(selectAction)
 		if selectAction == "Discard" {
-			cli.service.DiscardHand()
+			if err := cli.service.DiscardHand(); err != nil {
+				return err
+			}
 			continue
 		}
 		if selectAction == "Cancel" {
@@ -115,10 +117,6 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("\nScore: %d\n\n", r.Score)
 
 			time.Sleep(1 * time.Second)
-		} else {
-			if err := cli.service.DiscardHand(); err != nil {
-				return err
-			}
 		}
 
 		// show remain cards
