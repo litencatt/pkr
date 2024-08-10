@@ -111,7 +111,7 @@ func (cli *PokerCLI) Run() error {
 		}
 
 		cli.service.SelectCards(selectCards)
-		cli.service.SetSelectAction(selectAction)
+		cli.service.SetAction(selectAction)
 		if selectAction == "Discard" {
 			if err := cli.service.DiscardHand(); err != nil {
 				return err
@@ -145,9 +145,9 @@ func (cli *PokerCLI) Run() error {
 			fmt.Println()
 		}
 
-		roundResultStats := cli.service.GetRoundStats()
+		stats := cli.service.GetRoundStats()
 		if cli.service.IsRoundWin() {
-			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
+			fmt.Printf("Score at least: %d, Round score: %d\n", stats.ScoreAtLeast, stats.TotalScore)
 			fmt.Println("")
 
 			prompt := &survey.Select{
@@ -162,8 +162,8 @@ func (cli *PokerCLI) Run() error {
 			continue
 		}
 
-		if roundResultStats.Hands == 0 {
-			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
+		if stats.Hands == 0 {
+			fmt.Printf("Score at least: %d, Round score: %d\n", stats.ScoreAtLeast, stats.TotalScore)
 			fmt.Println("You lose!")
 			break
 		}
