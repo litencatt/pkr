@@ -28,21 +28,29 @@ func NewPokerCLI() *PokerCLI {
 }
 
 func (cli *PokerCLI) Run() error {
-	ante := cli.service.GetCurrentAnte()
-	blind := cli.service.GetCurrentBlind()
-	ScoreAtLeast := int(float64(ante) * blind)
+	sleepSec := 1
 
-	fmt.Println("Welcome to Poker!")
+	fmt.Println("*********************")
+	fmt.Println("* Welcome to Poker! *")
+	fmt.Println("*********************")
 	fmt.Println()
-	fmt.Printf("Round start\n")
-	fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
-	fmt.Printf("Score at least: %d\n", ScoreAtLeast)
-	cli.service.StartRound(ScoreAtLeast)
-
-	var selectCardNum int
-	var selectAction string
+	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	for {
+		if cli.service.IsStartRound() {
+			rounds := cli.service.GetRounds()
+			fmt.Println("")
+			fmt.Printf("Round %d start\n\n", rounds)
+			time.Sleep(time.Duration(sleepSec) * time.Second)
+
+			ante := cli.service.GetCurrentAnteAmount()
+			blind := cli.service.GetCurrentBlindMulti()
+			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
+			time.Sleep(time.Duration(sleepSec) * time.Second)
+
+			cli.service.StartRound()
+		}
+
 		roundStats := cli.service.GetRoundStats()
 		fmt.Printf("Score at least: %d\n", roundStats.ScoreAtLeast)
 		fmt.Printf("Round score: %d\n", roundStats.TotalScore)
@@ -51,8 +59,16 @@ func (cli *PokerCLI) Run() error {
 
 		// Draw cards
 		drawNum := cli.service.GetNextDrawNum()
-		if err := cli.service.DrawCard(drawNum); err != nil {
+		cards, err := cli.service.DrawCard(drawNum)
+		if err != nil {
 			return err
+		}
+		fmt.Println("[Draw", drawNum, "cards]")
+		if cli.DebugMode {
+			for _, card := range cards {
+				fmt.Println(card.String())
+			}
+			fmt.Println()
 		}
 
 		// Select cards
@@ -69,15 +85,13 @@ func (cli *PokerCLI) Run() error {
 				os.Exit(0)
 			}
 
-			selectCardNum = len(selectCards)
+			selectCardNum := len(selectCards)
 			if selectCardNum <= 5 {
 				break
 			}
 			fmt.Println("Please select less than 5 cards")
 			fmt.Println()
 		}
-
-		cli.service.SelectCards(selectCards)
 		fmt.Print("[Selected cards]\n")
 		for _, card := range selectCards {
 			fmt.Println(card)
@@ -85,6 +99,7 @@ func (cli *PokerCLI) Run() error {
 		fmt.Println()
 
 		// Play or Discard or Cancel
+		var selectAction string
 		actions := cli.service.GetEnableActions()
 		prompt := &survey.Select{
 			Message: "Select action:",
@@ -95,9 +110,12 @@ func (cli *PokerCLI) Run() error {
 			os.Exit(0)
 		}
 
+		cli.service.SelectCards(selectCards)
 		cli.service.SetSelectAction(selectAction)
 		if selectAction == "Discard" {
-			cli.service.DiscardHand()
+			if err := cli.service.DiscardHand(); err != nil {
+				return err
+			}
 			continue
 		}
 		if selectAction == "Cancel" {
@@ -114,11 +132,7 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("\nChip: %d, Mult: %d\n", r.Chip, r.Mult)
 			fmt.Printf("\nScore: %d\n\n", r.Score)
 
-			time.Sleep(1 * time.Second)
-		} else {
-			if err := cli.service.DiscardHand(); err != nil {
-				return err
-			}
+			time.Sleep(time.Duration(sleepSec) * time.Second)
 		}
 
 		// show remain cards
@@ -132,18 +146,28 @@ func (cli *PokerCLI) Run() error {
 		}
 
 		roundResultStats := cli.service.GetRoundStats()
-		if roundResultStats.TotalScore >= roundResultStats.ScoreAtLeast {
+		if cli.service.IsRoundWin() {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
-			fmt.Println("You win!")
-			break
-		} else if roundResultStats.Hands <= 0 {
+			fmt.Println("")
+
+			prompt := &survey.Select{
+				Message: "You win this round!",
+				Options: []string{"Next"},
+			}
+			if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
+				fmt.Println("interrupted")
+				os.Exit(0)
+			}
+			cli.service.NextRound()
+			continue
+		}
+
+		if roundResultStats.Hands == 0 {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
 			fmt.Println("You lose!")
-		} else {
-			if roundResultStats.Hands > 0 && roundResultStats.TotalScore < roundResultStats.ScoreAtLeast {
-				continue
-			}
+			break
 		}
+
 	}
 
 	return nil

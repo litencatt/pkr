@@ -23,6 +23,19 @@ type PokerRound struct {
 	BeforeSelectAction string
 }
 
+func NewPokerRound(deck Deck, hands, discards, scoreAtLeast int) *PokerRound {
+	return &PokerRound{
+		Deck:          deck,
+		TotalScore:    0,
+		HandCards:     PokerHandCard{},
+		RemainCards:   nil,
+		SelectedCards: nil,
+		Hands:         hands,
+		Discards:      discards,
+		ScoreAtLeast:  scoreAtLeast,
+	}
+}
+
 func (p *PokerRound) DrawCard(drawNum int) []Trump {
 	if drawNum == 0 {
 		return nil
@@ -103,4 +116,8 @@ func (p *PokerRound) GetRoundStats() *PokerRoundStats {
 		TotalScore:   p.TotalScore,
 		ScoreAtLeast: p.ScoreAtLeast,
 	}
+}
+
+func (p *PokerRound) IsWin() bool {
+	return p.TotalScore >= p.ScoreAtLeast
 }

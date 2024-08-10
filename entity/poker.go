@@ -1,6 +1,6 @@
 package entity
 
-var Antes = []int{
+var AnteAmounts = []int{
 	300,
 	800,
 	2800,
@@ -20,33 +20,66 @@ var Antes = []int{
 	8600,
 }
 
-// Multi
-var Blinds = []float64{
+var BlindMultis = []float64{
 	1.0,
 	1.5,
 	2.0,
 }
 
 type RunInfo struct {
-	DefaultDeal int
-	Ante        int
-	Blind       float64
-	Deck        Deck
-	PokerHands  *PokerHands
-	Hands       int
-	Discards    int
-	Round       *PokerRound
+	DefaultDeal     int
+	DefaultHands    int
+	DefaultDiscards int
+	AnteIndex       int
+	BlindIndex      int
+	Deck            Deck
+	PokerHands      *PokerHands
+	Hands           int
+	Discards        int
+	Rounds          int
+	Round           *PokerRound
+	StartNext       bool
 }
 
 func NewRunInfo() *RunInfo {
 	return &RunInfo{
-		DefaultDeal: 8,
-		Ante:        Antes[0],
-		Blind:       Blinds[0],
-		Deck:        NewDeck(),
-		PokerHands:  NewPokerHands(),
-		Hands:       4,
-		Discards:    3,
-		Round:       nil,
+		DefaultDeal:     8,
+		DefaultHands:    4,
+		DefaultDiscards: 3,
+		Hands:           4,
+		Discards:        3,
+		Deck:            NewDeck(),
+		PokerHands:      NewPokerHands(),
+		Rounds:          1,
+		Round:           nil,
+		StartNext:       true,
+		AnteIndex:       0,
+		BlindIndex:      0,
 	}
+}
+
+func (r *RunInfo) UnsetStartNext() {
+	r.StartNext = false
+}
+
+func (r *RunInfo) NextRound() error {
+	r.Rounds += 1
+	r.NextBlind()
+	r.StartNext = true
+
+	return nil
+}
+
+func (r *RunInfo) NextBlind() error {
+	r.BlindIndex += 1
+	if r.BlindIndex >= len(BlindMultis) {
+		r.BlindIndex = 0
+		r.NextAnte()
+	}
+	return nil
+}
+
+func (r *RunInfo) NextAnte() error {
+	r.AnteIndex += 1
+	return nil
 }
