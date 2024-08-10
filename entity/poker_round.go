@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"sort"
 	"strings"
 )
 
@@ -37,12 +36,6 @@ func NewPokerRound(deck Deck, hands, discards, scoreAtLeast int) *PokerRound {
 	}
 }
 
-func SortTrumps(trumps []Trump) {
-	sort.Slice(trumps, func(i, j int) bool {
-		return trumps[i].GetSortOrder() < trumps[j].GetSortOrder()
-	})
-}
-
 func (p *PokerRound) DrawCard(drawNum int) []Trump {
 	if drawNum == 0 {
 		return nil
@@ -57,7 +50,7 @@ func (p *PokerRound) DrawCard(drawNum int) []Trump {
 	p.HandCards = append(p.HandCards, drawCards...)
 
 	// Sort hand cards
-	SortTrumps(p.HandCards)
+	Sort(p.HandCards)
 
 	return drawCards
 }

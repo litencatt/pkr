@@ -1,5 +1,7 @@
 package entity
 
+import "sort"
+
 type Suit string
 type Rank string
 
@@ -100,4 +102,10 @@ func Contains(trumps []Trump, trump Trump) bool {
 		}
 	}
 	return false
+}
+
+func Sort(trumps []Trump) {
+	sort.Slice(trumps, func(i, j int) bool {
+		return trumps[i].GetSortOrder() < trumps[j].GetSortOrder()
+	})
 }
