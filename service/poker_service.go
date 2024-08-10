@@ -1,14 +1,12 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/litencatt/pkr/entity"
 )
 
 type PokerService interface {
 	StartRound() error
-	DrawCard(int) error
+	DrawCard(int) ([]entity.Trump, error)
 	SelectCards([]string) error
 	PlayHand() (entity.PokerHandStats, error)
 	DiscardHand() error
@@ -74,17 +72,9 @@ func (s *pokerService) StartRound() error {
 	return nil
 }
 
-func (s *pokerService) DrawCard(num int) error {
+func (s *pokerService) DrawCard(num int) ([]entity.Trump, error) {
 	cards := s.runInfo.Round.DrawCard(num)
-	if s.config.DebugMode {
-		fmt.Println("[Draw", num, "cards]")
-		for _, card := range cards {
-			fmt.Println(card.String())
-		}
-		fmt.Println()
-	}
-
-	return nil
+	return cards, nil
 }
 
 func (s *pokerService) GetCurrentAnteAmount() int {

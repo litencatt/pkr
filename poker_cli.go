@@ -54,8 +54,16 @@ func (cli *PokerCLI) Run() error {
 
 		// Draw cards
 		drawNum := cli.service.GetNextDrawNum()
-		if err := cli.service.DrawCard(drawNum); err != nil {
+		cards, err := cli.service.DrawCard(drawNum)
+		if err != nil {
 			return err
+		}
+		fmt.Println("[Draw", drawNum, "cards]")
+		if cli.DebugMode {
+			for _, card := range cards {
+				fmt.Println(card.String())
+			}
+			fmt.Println()
 		}
 
 		// Select cards
