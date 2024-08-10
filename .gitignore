@@ -21,5 +21,6 @@
 go.work
 
 # pkr
+pkr
 tmp/
 dist/

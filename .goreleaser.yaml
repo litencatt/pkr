@@ -43,5 +43,5 @@ brews:
       name: litencatt
       email: litencatt@gmail.com
     homepage: https://github.com/litencatt/pkr
-    description: pkr is Rogure-Like Poker CLI game.
+    description: pkr is Poker CLI game.
     license: MIT

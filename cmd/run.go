@@ -14,7 +14,7 @@ var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Run poker",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		poker := pkr.NewPoker()
+		poker := pkr.NewPokerCLI()
 		if debugMode {
 			poker.DebugMode = true
 		}

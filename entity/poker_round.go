@@ -4,6 +4,13 @@ import (
 	"strings"
 )
 
+type PokerRoundStats struct {
+	Hands        int
+	Discards     int
+	TotalScore   int
+	ScoreAtLeast int
+}
+
 type PokerRound struct {
 	Deck          Deck
 	TotalScore    int
@@ -80,4 +87,13 @@ func (p *PokerRound) GetSelectCardsRankTotal() int {
 		total += card.GetRankNumber()
 	}
 	return total
+}
+
+func (p *PokerRound) GetRoundStats() *PokerRoundStats {
+	return &PokerRoundStats{
+		Hands:        p.Hands,
+		Discards:     p.Discards,
+		TotalScore:   p.TotalScore,
+		ScoreAtLeast: p.ScoreAtLeast,
+	}
 }
