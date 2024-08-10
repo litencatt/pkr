@@ -23,10 +23,16 @@ type PokerRound struct {
 }
 
 func (p *PokerRound) DrawCard(drawNum int) []Trump {
-	p.HandCards.Trumps = nil
+	if drawNum == 0 {
+		return nil
+	}
 
-	drawCards := p.Deck.Draw(drawNum)
+	// Remain cards
+	p.HandCards.Trumps = nil
 	p.HandCards.Trumps = append(p.HandCards.Trumps, p.RemainCards...)
+
+	// Draw cards and append to hand
+	drawCards := p.Deck.Draw(drawNum)
 	p.HandCards.Trumps = append(p.HandCards.Trumps, drawCards...)
 
 	p.HandCards.Sort()
