@@ -22,7 +22,7 @@ type PokerCLI struct {
 func NewPokerCLI() *PokerCLI {
 	return &PokerCLI{
 		service: service.NewPokerService(service.PokerServiceConfig{
-			DebugMode: false,
+			DebugMode: true,
 		}),
 	}
 }
@@ -40,25 +40,20 @@ func (cli *PokerCLI) Run() error {
 	cli.service.StartRound(ScoreAtLeast)
 
 	var selectCardNum int
-	var nextDrawNum int
+	var selectAction string
 
 	for {
-		if selectCardNum == 0 {
-			nextDrawNum = cli.service.GetNextDrawNum()
-		} else {
-			// Draw cards num is same as the last selected cards num
-			nextDrawNum = selectCardNum
-		}
-
-		if err := cli.service.DrawCard(nextDrawNum); err != nil {
-			return err
-		}
-
 		roundStats := cli.service.GetRoundStats()
 		fmt.Printf("Score at least: %d\n", roundStats.ScoreAtLeast)
 		fmt.Printf("Round score: %d\n", roundStats.TotalScore)
 		fmt.Printf("Hands: %d, Discards: %d\n", roundStats.Hands, roundStats.Discards)
 		fmt.Println()
+
+		// Draw cards
+		drawNum := cli.service.GetNextDrawNum()
+		if err := cli.service.DrawCard(drawNum); err != nil {
+			return err
+		}
 
 		// Select cards
 		var selectCards []string
@@ -90,23 +85,26 @@ func (cli *PokerCLI) Run() error {
 		fmt.Println()
 
 		// Play or Discard or Cancel
-		var playOrDsicard string
-		var pdOptions = []string{"Play"}
-		if roundStats.Discards > 0 {
-			pdOptions = append(pdOptions, "Discard")
-		}
-		pdOptions = append(pdOptions, "Cancel")
+		actions := cli.service.GetEnableActions()
 		prompt := &survey.Select{
 			Message: "Select action:",
-			Options: pdOptions,
+			Options: actions,
 		}
-		if err := survey.AskOne(prompt, &playOrDsicard); err == terminal.InterruptErr {
+		if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
 			fmt.Println("interrupted")
 			os.Exit(0)
 		}
 
-		// TODO: add cancel action
-		if playOrDsicard == "Play" {
+		cli.service.SetSelectAction(selectAction)
+		if selectAction == "Discard" {
+			cli.service.DiscardHand()
+			continue
+		}
+		if selectAction == "Cancel" {
+			cli.service.CancelHand()
+			continue
+		}
+		if selectAction == "Play" {
 			r, err := cli.service.PlayHand()
 			if err != nil {
 				return err
@@ -131,10 +129,6 @@ func (cli *PokerCLI) Run() error {
 				fmt.Println(card)
 			}
 			fmt.Println()
-		}
-
-		if playOrDsicard == "Discard" {
-			continue
 		}
 
 		roundResultStats := cli.service.GetRoundStats()

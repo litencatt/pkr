@@ -12,21 +12,28 @@ type PokerRoundStats struct {
 }
 
 type PokerRound struct {
-	Deck          Deck
-	TotalScore    int
-	HandCards     PokerHandCard
-	RemainCards   []Trump
-	SelectedCards []Trump
-	Hands         int
-	Discards      int
-	ScoreAtLeast  int
+	Deck               Deck
+	TotalScore         int
+	HandCards          PokerHandCard
+	RemainCards        []Trump
+	SelectedCards      []Trump
+	Hands              int
+	Discards           int
+	ScoreAtLeast       int
+	BeforeSelectAction string
 }
 
 func (p *PokerRound) DrawCard(drawNum int) []Trump {
-	p.HandCards.Trumps = nil
+	if drawNum == 0 {
+		return nil
+	}
 
-	drawCards := p.Deck.Draw(drawNum)
+	// Remain cards
+	p.HandCards.Trumps = nil
 	p.HandCards.Trumps = append(p.HandCards.Trumps, p.RemainCards...)
+
+	// Draw cards and append to hand
+	drawCards := p.Deck.Draw(drawNum)
 	p.HandCards.Trumps = append(p.HandCards.Trumps, drawCards...)
 
 	p.HandCards.Sort()
