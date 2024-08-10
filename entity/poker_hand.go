@@ -8,15 +8,15 @@ type HandType string
 
 const (
 	HighCard      HandType = "High Card"
-	OnePair                = "One Pair"
-	TwoPair                = "Two Pair"
-	ThreeOfAKind           = "Three of a Kind"
-	Straight               = "Straight"
-	Flush                  = "Flush"
-	FullHouse              = "Full House"
-	FourOfAKind            = "Four of a Kind"
-	StraightFlush          = "Straight Flush"
-	RoyalFlush             = "Royal Flush"
+	OnePair       HandType = "One Pair"
+	TwoPair       HandType = "Two Pair"
+	ThreeOfAKind  HandType = "Three of a Kind"
+	Straight      HandType = "Straight"
+	Flush         HandType = "Flush"
+	FullHouse     HandType = "Full House"
+	FourOfAKind   HandType = "Four of a Kind"
+	StraightFlush HandType = "Straight Flush"
+	RoyalFlush    HandType = "Royal Flush"
 )
 
 type PokerHands struct {
