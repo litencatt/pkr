@@ -25,7 +25,7 @@ type PokerService interface {
 	GetHandCardString() []string
 	GetRemainCardString() []string
 	GetEnableActions() []string
-	SetSelectAction(string)
+	SetAction(string)
 }
 
 type pokerService struct {
@@ -169,7 +169,7 @@ func (s *pokerService) GetRoundStats() *entity.PokerRoundStats {
 	return s.runInfo.Round.GetRoundStats()
 }
 
-func (s *pokerService) SetSelectAction(action string) {
+func (s *pokerService) SetAction(action string) {
 	s.runInfo.Round.BeforeSelectAction = action
 }
 
