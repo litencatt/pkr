@@ -62,15 +62,9 @@ func (r *RunInfo) UnsetStartNext() {
 	r.StartNext = false
 }
 
-func (r *RunInfo) NextAnte() error {
-	r.AnteIndex += 1
-	return nil
-}
-
 func (r *RunInfo) NextRound() error {
 	r.Rounds += 1
 	r.NextBlind()
-	r.NextAnte()
 	r.StartNext = true
 
 	return nil
@@ -80,11 +74,12 @@ func (r *RunInfo) NextBlind() error {
 	r.BlindIndex += 1
 	if r.BlindIndex >= len(BlindMultis) {
 		r.BlindIndex = 0
+		r.NextAnte()
 	}
 	return nil
 }
 
-func (r *RunInfo) ResetBlind() error {
-	r.BlindIndex = 0
+func (r *RunInfo) NextAnte() error {
+	r.AnteIndex += 1
 	return nil
 }
