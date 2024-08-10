@@ -9,13 +9,18 @@ import (
 type PokerService interface {
 	StartRound(int) error
 	DrawCard(int) error
-	PlayHand() error
+	PlayHand() (entity.PokerHandStats, error)
 	DiscardHand() error
 	NextRound() error
 	NextAnte() error
+	GetCurrentAnte() int
+	GetCurrentBlind() float64
 	GetNextDrawNum() int
-	GetRoundInfo() *entity.PokerRound
 	GetChipAndMult(entity.HandType, int) (int, int)
+	SelectCards([]string) error
+	GetHandCardString() []string
+	GetRemainCardString() []string
+	GetRoundStats() *entity.PokerRoundStats
 }
 
 type pokerService struct {
@@ -36,10 +41,6 @@ type PokerServiceConfig struct {
 
 func (s *pokerService) GetNextDrawNum() int {
 	return s.runInfo.DefaultDeal
-}
-
-func (s *pokerService) GetRoundInfo() *entity.PokerRound {
-	return s.runInfo.Round
 }
 
 func (s *pokerService) GetChipAndMult(handType entity.HandType, level int) (int, int) {
@@ -74,12 +75,55 @@ func (s *pokerService) DrawCard(nextDrawNum int) error {
 	return nil
 }
 
-func (s *pokerService) PlayHand() error {
+func (s *pokerService) GetCurrentAnte() int {
+	return s.runInfo.Ante
+}
+
+func (s *pokerService) GetCurrentBlind() float64 {
+	return s.runInfo.Blind
+}
+
+func (s *pokerService) SelectCards(cards []string) error {
+	s.runInfo.Round.SetSelectCards(cards)
 	return nil
 }
 
+func (s *pokerService) PlayHand() (entity.PokerHandStats, error) {
+	s.runInfo.Hands--
+
+	round := s.runInfo.Round
+
+	// get hand type and base chip and mult
+	handType := round.PlayHand()
+	chip, mult := s.GetChipAndMult(handType, 1)
+
+	// get card rank and add to chip
+	handsRankTotal := round.GetSelectCardsRankTotal()
+	chip += handsRankTotal
+	score := chip * mult
+	round.TotalScore += score
+
+	stats := entity.PokerHandStats{
+		HandType: handType,
+		Chip:     chip,
+		Mult:     mult,
+		Score:    score,
+	}
+
+	return stats, nil
+}
+
 func (s *pokerService) DiscardHand() error {
+	s.runInfo.Discards--
 	return nil
+}
+
+func (s *pokerService) GetHandCardString() []string {
+	return s.runInfo.Round.HandCardString()
+}
+
+func (s *pokerService) GetRemainCardString() []string {
+	return s.runInfo.Round.RemainCardString()
 }
 
 func (s *pokerService) NextRound() error {
@@ -88,6 +132,10 @@ func (s *pokerService) NextRound() error {
 
 func (s *pokerService) NextAnte() error {
 	return nil
+}
+
+func (s *pokerService) GetRoundStats() *entity.PokerRoundStats {
+	return s.runInfo.Round.GetRoundStats()
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig

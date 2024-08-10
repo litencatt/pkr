@@ -34,6 +34,14 @@ type PokerHandLevel struct {
 	Mult  int
 }
 
+type PokerHandStats struct {
+	HandType HandType
+	Level    int
+	Chip     int
+	Mult     int
+	Score    int
+}
+
 // FIXME: Set the correct chip and mult values for each hand type and level
 func NewPokerHands() *PokerHands {
 	return &PokerHands{

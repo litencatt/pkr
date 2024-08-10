@@ -1,6 +1,5 @@
 package entity
 
-// Anteを配列で定義する
 var Antes = []int{
 	300,
 	800,
