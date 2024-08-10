@@ -32,20 +32,22 @@ func (cli *PokerCLI) Run() error {
 	fmt.Println("*********************")
 	fmt.Println("* Welcome to Poker! *")
 	fmt.Println("*********************")
-	time.Sleep(time.Duration(sleepSec) * time.Second)
-
 	fmt.Println()
-	fmt.Printf("Round start\n")
 	time.Sleep(time.Duration(sleepSec) * time.Second)
-
-	ante := cli.service.GetCurrentAnteAmount()
-	blind := cli.service.GetCurrentBlindMulti()
-	fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
-	time.Sleep(time.Duration(sleepSec) * time.Second)
-
-	cli.service.StartRound()
 
 	for {
+		if cli.service.IsStartRound() {
+			rounds := cli.service.GetRounds()
+			fmt.Printf("Round %d start\n", rounds)
+			time.Sleep(time.Duration(sleepSec) * time.Second)
+
+			ante := cli.service.GetCurrentAnteAmount()
+			blind := cli.service.GetCurrentBlindMulti()
+			fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
+			time.Sleep(time.Duration(sleepSec) * time.Second)
+			cli.service.StartRound()
+		}
+
 		roundStats := cli.service.GetRoundStats()
 		fmt.Printf("Score at least: %d\n", roundStats.ScoreAtLeast)
 		fmt.Printf("Round score: %d\n", roundStats.TotalScore)
@@ -153,6 +155,7 @@ func (cli *PokerCLI) Run() error {
 				fmt.Println("interrupted")
 				os.Exit(0)
 			}
+			cli.service.NextRound()
 			continue
 		}
 

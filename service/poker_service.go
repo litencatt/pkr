@@ -5,24 +5,27 @@ import (
 )
 
 type PokerService interface {
+	IsStartRound() bool
 	StartRound() error
-	DrawCard(int) ([]entity.Trump, error)
+	GetRounds() int
+	IsRoundWin() bool
+	NextRound() error
+	GetRoundStats() *entity.PokerRoundStats
+
 	SelectCards([]string) error
+	DrawCard(int) ([]entity.Trump, error)
 	PlayHand() (entity.PokerHandStats, error)
 	DiscardHand() error
 	CancelHand() error
-	NextAnte() error
-	NextBlind() error
+
 	GetCurrentAnteAmount() int
 	GetCurrentBlindMulti() float64
 	GetNextDrawNum() int
 	GetChipAndMult(entity.HandType, int) (int, int)
 	GetHandCardString() []string
 	GetRemainCardString() []string
-	GetRoundStats() *entity.PokerRoundStats
 	GetEnableActions() []string
 	SetSelectAction(string)
-	IsRoundWin() bool
 }
 
 type pokerService struct {
@@ -57,16 +60,20 @@ func (s *pokerService) GetChipAndMult(handType entity.HandType, level int) (int,
 	return s.runInfo.PokerHands.GetChipAndMult(handType, level)
 }
 
-func (s *pokerService) StartRound() error {
-	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
-	s.runInfo.Round = &entity.PokerRound{
-		Deck:         s.runInfo.Deck,
-		TotalScore:   0,
-		Hands:        s.runInfo.Hands,
-		Discards:     s.runInfo.Discards,
-		ScoreAtLeast: scoreAtLeast,
-	}
+func (s *pokerService) IsStartRound() bool {
+	return s.runInfo.StartNext
+}
 
+func (s *pokerService) StartRound() error {
+	s.runInfo.UnsetStartNext()
+
+	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
+	s.runInfo.Round = entity.NewPokerRound(
+		s.runInfo.Deck,
+		s.runInfo.DefaultHands,
+		s.runInfo.DefaultDiscards,
+		scoreAtLeast,
+	)
 	s.runInfo.Round.Deck.Shuffle()
 
 	return nil
@@ -81,13 +88,16 @@ func (s *pokerService) GetCurrentAnteAmount() int {
 	return entity.AnteAmounts[s.runInfo.AnteIndex]
 }
 
-func (s *pokerService) NextAnte() error {
-	return s.runInfo.NextAnte()
-}
-
-// next blind
-func (s *pokerService) NextBlind() error {
-	return s.runInfo.NextBlind()
+func (s *pokerService) NextRound() error {
+	s.runInfo.NextRound()
+	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
+	s.runInfo.Round = entity.NewPokerRound(
+		s.runInfo.Deck,
+		s.runInfo.DefaultHands,
+		s.runInfo.DefaultDiscards,
+		scoreAtLeast,
+	)
+	return nil
 }
 
 func (s *pokerService) GetCurrentBlindMulti() float64 {
@@ -165,6 +175,10 @@ func (s *pokerService) SetSelectAction(action string) {
 
 func (s *pokerService) IsRoundWin() bool {
 	return s.runInfo.Round.IsWin()
+}
+
+func (s *pokerService) GetRounds() int {
+	return s.runInfo.Rounds
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig
