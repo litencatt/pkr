@@ -4,13 +4,6 @@ import (
 	"strings"
 )
 
-type RoundStats struct {
-	Hands        int
-	Discards     int
-	TotalScore   int
-	ScoreAtLeast int
-}
-
 type PokerRound struct {
 	Deck               Deck
 	HandCards          []Trump
@@ -18,6 +11,13 @@ type PokerRound struct {
 	SelectedCards      []Trump
 	Stats              RoundStats
 	BeforeSelectAction string
+}
+
+type RoundStats struct {
+	Hands        int
+	Discards     int
+	TotalScore   int
+	ScoreAtLeast int
 }
 
 func NewPokerRound(deck Deck, hands, discards, scoreAtLeast int) *PokerRound {
