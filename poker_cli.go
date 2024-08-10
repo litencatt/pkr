@@ -29,6 +29,7 @@ func NewPokerCLI() *PokerCLI {
 
 func (cli *PokerCLI) Run() error {
 	sleepSec := 1
+
 	fmt.Println("*********************")
 	fmt.Println("* Welcome to Poker! *")
 	fmt.Println("*********************")
@@ -38,13 +39,15 @@ func (cli *PokerCLI) Run() error {
 	for {
 		if cli.service.IsStartRound() {
 			rounds := cli.service.GetRounds()
-			fmt.Printf("Round %d start\n", rounds)
+			fmt.Println("")
+			fmt.Printf("Round %d start\n\n", rounds)
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 
 			ante := cli.service.GetCurrentAnteAmount()
 			blind := cli.service.GetCurrentBlindMulti()
-			fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
+			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
 			time.Sleep(time.Duration(sleepSec) * time.Second)
+
 			cli.service.StartRound()
 		}
 
