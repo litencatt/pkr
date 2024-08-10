@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-type PokerRoundStats struct {
+type RoundStats struct {
 	Hands        int
 	Discards     int
 	TotalScore   int
@@ -13,26 +13,17 @@ type PokerRoundStats struct {
 
 type PokerRound struct {
 	Deck               Deck
-	TotalScore         int
 	HandCards          []Trump
 	RemainCards        []Trump
 	SelectedCards      []Trump
-	Hands              int
-	Discards           int
-	ScoreAtLeast       int
+	Stats              RoundStats
 	BeforeSelectAction string
 }
 
 func NewPokerRound(deck Deck, hands, discards, scoreAtLeast int) *PokerRound {
 	return &PokerRound{
-		Deck:          deck,
-		TotalScore:    0,
-		HandCards:     nil,
-		RemainCards:   nil,
-		SelectedCards: nil,
-		Hands:         hands,
-		Discards:      discards,
-		ScoreAtLeast:  scoreAtLeast,
+		Deck:  deck,
+		Stats: RoundStats{Hands: hands, Discards: discards, TotalScore: 0, ScoreAtLeast: scoreAtLeast},
 	}
 }
 
@@ -110,15 +101,10 @@ func (p *PokerRound) GetSelectCardsRankTotal() int {
 	return total
 }
 
-func (p *PokerRound) GetRoundStats() *PokerRoundStats {
-	return &PokerRoundStats{
-		Hands:        p.Hands,
-		Discards:     p.Discards,
-		TotalScore:   p.TotalScore,
-		ScoreAtLeast: p.ScoreAtLeast,
-	}
+func (p *PokerRound) GetRoundStats() *RoundStats {
+	return &p.Stats
 }
 
 func (p *PokerRound) IsWin() bool {
-	return p.TotalScore >= p.ScoreAtLeast
+	return p.Stats.TotalScore >= p.Stats.ScoreAtLeast
 }

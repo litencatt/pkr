@@ -10,7 +10,7 @@ type PokerService interface {
 	GetRounds() int
 	IsRoundWin() bool
 	NextRound() error
-	GetRoundStats() *entity.PokerRoundStats
+	GetRoundStats() *entity.RoundStats
 
 	SelectCards([]string) error
 	DrawCard(int) ([]entity.Trump, error)
@@ -25,6 +25,7 @@ type PokerService interface {
 	GetHandCardString() []string
 	GetRemainCardString() []string
 	GetEnableActions() []string
+
 	SetAction(string)
 }
 
@@ -106,7 +107,7 @@ func (s *pokerService) GetCurrentBlindMulti() float64 {
 
 func (s *pokerService) GetEnableActions() []string {
 	var actions = []string{"Play"}
-	if s.runInfo.Round.Discards > 0 {
+	if s.runInfo.Round.GetRoundStats().Discards > 0 {
 		actions = append(actions, "Discard")
 	}
 	actions = append(actions, "Cancel")
@@ -145,7 +146,7 @@ func (s *pokerService) PlayHand() (entity.PokerHandStats, error) {
 	handsRankTotal := round.GetSelectCardsRankTotal()
 	chip += handsRankTotal
 	score := chip * mult
-	round.TotalScore += score
+	round.Stats.TotalScore += score
 
 	stats := entity.PokerHandStats{
 		HandType: handType,
@@ -165,7 +166,7 @@ func (s *pokerService) GetRemainCardString() []string {
 	return s.runInfo.Round.RemainCardString()
 }
 
-func (s *pokerService) GetRoundStats() *entity.PokerRoundStats {
+func (s *pokerService) GetRoundStats() *entity.RoundStats {
 	return s.runInfo.Round.GetRoundStats()
 }
 
