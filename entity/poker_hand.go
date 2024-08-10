@@ -136,7 +136,7 @@ func NewPokerHands() *PokerHands {
 			{
 				HandType: FullHouse,
 				Level: []PokerHandLevel{
-					{Level: 1, Chip: 1, Mult: 1},
+					{Level: 1, Chip: 40, Mult: 4},
 					{Level: 2, Chip: 2, Mult: 1},
 					{Level: 3, Chip: 3, Mult: 1},
 					{Level: 4, Chip: 4, Mult: 1},
