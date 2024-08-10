@@ -104,3 +104,7 @@ func (p *PokerRound) GetRoundStats() *PokerRoundStats {
 		ScoreAtLeast: p.ScoreAtLeast,
 	}
 }
+
+func (p *PokerRound) IsWin() bool {
+	return p.TotalScore >= p.ScoreAtLeast
+}

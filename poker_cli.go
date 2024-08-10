@@ -129,18 +129,19 @@ func (cli *PokerCLI) Run() error {
 		}
 
 		roundResultStats := cli.service.GetRoundStats()
-		if roundResultStats.TotalScore >= roundResultStats.ScoreAtLeast {
+		if cli.service.IsRoundWin() {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
 			fmt.Println("You win!")
 			break
-		} else if roundResultStats.Hands <= 0 {
+		}
+
+		if roundResultStats.Hands > 0 {
+			continue
+		} else {
 			fmt.Printf("Score at least: %d, Round score: %d\n", roundResultStats.ScoreAtLeast, roundResultStats.TotalScore)
 			fmt.Println("You lose!")
-		} else {
-			if roundResultStats.Hands > 0 && roundResultStats.TotalScore < roundResultStats.ScoreAtLeast {
-				continue
-			}
 		}
+
 	}
 
 	return nil

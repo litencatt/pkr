@@ -24,6 +24,7 @@ type PokerService interface {
 	GetRoundStats() *entity.PokerRoundStats
 	GetEnableActions() []string
 	SetSelectAction(string)
+	IsRoundWin() bool
 }
 
 type pokerService struct {
@@ -169,6 +170,10 @@ func (s *pokerService) GetRoundStats() *entity.PokerRoundStats {
 
 func (s *pokerService) SetSelectAction(action string) {
 	s.runInfo.Round.BeforeSelectAction = action
+}
+
+func (s *pokerService) IsRoundWin() bool {
+	return s.runInfo.Round.IsWin()
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig
