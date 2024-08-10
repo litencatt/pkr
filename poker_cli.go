@@ -28,16 +28,20 @@ func NewPokerCLI() *PokerCLI {
 }
 
 func (cli *PokerCLI) Run() error {
+	sleepSec := 1
 	fmt.Println("*********************")
 	fmt.Println("* Welcome to Poker! *")
 	fmt.Println("*********************")
+	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	fmt.Println()
 	fmt.Printf("Round start\n")
+	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	ante := cli.service.GetCurrentAnteAmount()
 	blind := cli.service.GetCurrentBlindMulti()
 	fmt.Printf("Ante:%d, Blind:%v\n", ante, blind)
+	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	cli.service.StartRound()
 
@@ -115,7 +119,7 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("\nChip: %d, Mult: %d\n", r.Chip, r.Mult)
 			fmt.Printf("\nScore: %d\n\n", r.Score)
 
-			time.Sleep(1 * time.Second)
+			time.Sleep(time.Duration(sleepSec) * time.Second)
 		}
 
 		// show remain cards
