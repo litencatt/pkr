@@ -1,0 +1,12 @@
+{
+  "Joker1": {
+    "rarity": "Common",
+    "name": "Joker1",
+    "description": "Add 1 multiples"
+  },
+  "Joker2": {
+    "rarity": "Common",
+    "name": "Joker2",
+    "description": "Add 2 multiples"
+  }
+}
