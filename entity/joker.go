@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -20,10 +21,54 @@ type JokerCard struct {
 }
 
 type JokerEffect struct {
-	Rarity      Rarity `yaml:"rarity"`
-	Name        string `yaml:"name"`
-	Description string `yaml:"description"`
-	Effect      func() `yaml:"-"`
+	Rarity      Rarity      `yaml:"rarity"`
+	Name        string      `yaml:"name"`
+	Description string      `yaml:"description"`
+	Price       int         `yaml:"price"`
+	Condition   []Condition `yaml:"apply_conditions"`
+	Effect      []Effect    `yaml:"effects"`
+}
+
+type Condition struct {
+	Rank      Rank      `yaml:"rank"`
+	Suit      Suit      `yaml:"suit"`
+	PokerHand PokerHand `yaml:"poker_hand"`
+}
+
+type Effect struct {
+	Chips     *ChipsEffect     `yaml:"chips,omitempty"`
+	Multiples *MultiplesEffect `yaml:"multiples,omitempty"`
+}
+
+type ChipsEffect struct {
+	Add int `yaml:"add"`
+}
+
+type MultiplesEffect struct {
+	Add      int `yaml:"add,omitempty"`
+	Multiply int `yaml:"multiply,omitempty"`
+}
+
+func (e *JokerEffect) IsApplicable(cards []Trump) bool {
+	return true
+}
+
+func ApplyEffect(effect *JokerEffect, chips *int, mult *int) {
+	if effect == nil {
+		return
+	}
+
+	for _, eff := range effect.Effect {
+		if eff.Chips != nil {
+			*chips += eff.Chips.Add
+		} else {
+			if eff.Multiples.Add != 0 {
+				*mult += eff.Multiples.Add
+			} else {
+				*mult *= eff.Multiples.Multiply
+			}
+		}
+	}
 }
 
 func GetJokerCards() map[string]JokerCard {

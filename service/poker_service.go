@@ -159,10 +159,24 @@ func (s *pokerService) PlayHand() (entity.PokerHandStats, error) {
 	// get hand type and base chip and mult
 	handType := round.PlayHand()
 	chip, mult := s.GetChipAndMult(handType, 1)
+	fmt.Printf("PlayHand() - chip: %d, mult: %d\n", chip, mult)
 
 	// get card rank and add to chip
 	handsRankTotal := round.GetSelectCardsRankTotal()
 	chip += handsRankTotal
+	fmt.Printf("Calc handsRankTotal: %d\n", handsRankTotal)
+	fmt.Printf("chip: %d, mult: %d\n", chip, mult)
+
+	// apply joker card effect
+	jokerCards := s.GetJokerCards()
+	for _, joker := range jokerCards {
+		if joker.Effects.IsApplicable(round.SelectedCards) {
+			entity.ApplyEffect(joker.Effects, &chip, &mult)
+		}
+	}
+	fmt.Printf("After apply joker card effect - chip: %d, mult: %d\n", chip, mult)
+
+	// calculate score
 	score := chip * mult
 	round.Stats.TotalScore += score
 
@@ -202,7 +216,7 @@ func (s *pokerService) GetRounds() int {
 
 func (s *pokerService) ShopOpen() []string {
 	if s.runInfo.Rounds <= 1 {
-		// return nil
+		return nil
 	}
 
 	shop := entity.NewShop()

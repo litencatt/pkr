@@ -1,9 +1,34 @@
 ---
 - name: Joker1
-  description: Add 1 multiples
+  description: Add 10 chips
   rarity: Common
   price: 10
+  apply_conditions:
+    - rank:
+    - suit: heart
+    - poker_hand:
+  effects:
+    - chips:
+        add: 10
 - name: Joker2
   description: Add 2 multiples
   rarity: Common
   price: 20
+  apply_conditions:
+    - rank:
+    - suit: club
+    - poker_hand:
+  effects:
+    - multiples:
+        add: 2
+- name: Joker3
+  description: Multiply score by 3
+  rarity: Common
+  price: 30
+  apply_conditions:
+    - rank:
+    - suit: diamond
+    - poker_hand:
+  effects:
+    - multiples:
+        multiply: 5
