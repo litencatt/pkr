@@ -95,6 +95,18 @@ func (t Trump) GetSortOrder() int {
 	return 0
 }
 
+func (t Trump) isFaceCard() bool {
+	return t.Rank == Jack || t.Rank == Queen || t.Rank == King
+}
+
+func (t Trump) isEven() bool {
+	return !t.isFaceCard() && t.GetRankNumber()%2 == 0
+}
+
+func (t Trump) isOdd() bool {
+	return !t.isFaceCard() && t.GetRankNumber()%2 != 0
+}
+
 func Contains(trumps []Trump, trump Trump) bool {
 	for _, t := range trumps {
 		if t == trump {

@@ -3,6 +3,7 @@ package pkr
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -37,6 +38,18 @@ func (cli *PokerCLI) Run() error {
 	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	for {
+		var selectShopItem []string
+		if shopItems := cli.service.ShopOpen(); shopItems != nil {
+			promptMs := &survey.MultiSelect{
+				Message: "Select a shop item",
+				Options: shopItems,
+			}
+			survey.AskOne(promptMs, &selectShopItem)
+			fmt.Printf("Selected shop item: %s\n", selectShopItem)
+			itemName := strings.Split(selectShopItem[0], ":")[0]
+			cli.service.AddShopItem(itemName)
+		}
+
 		if cli.service.IsStartRound() {
 			rounds := cli.service.GetRounds()
 			fmt.Println("")
@@ -48,7 +61,8 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 
-			cli.service.StartRound()
+			jokerCards := cli.service.GetJokerCards()
+			cli.service.StartRound(jokerCards)
 		}
 
 		roundStats := cli.service.GetRoundStats()
@@ -152,7 +166,7 @@ func (cli *PokerCLI) Run() error {
 
 			prompt := &survey.Select{
 				Message: "You win this round!",
-				Options: []string{"Next"},
+				Options: []string{"Next Round"},
 			}
 			if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
 				fmt.Println("interrupted")
