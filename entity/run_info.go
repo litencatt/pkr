@@ -82,3 +82,7 @@ func (r *RunInfo) NextAnte() error {
 func (s *RunInfo) AddJokerCard(jokerCard JokerCard) {
 	s.JokerCards = append(s.JokerCards, jokerCard)
 }
+
+func (s *RunInfo) GetJokerCards() []JokerCard {
+	return s.JokerCards
+}

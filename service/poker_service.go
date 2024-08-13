@@ -34,6 +34,7 @@ type PokerService interface {
 	AddShopItem(string) error
 
 	ShowJokers()
+	GetJokerCards() []entity.JokerCard
 }
 
 type pokerService struct {
@@ -217,6 +218,10 @@ func (s *pokerService) AddShopItem(itemName string) error {
 
 func (s *pokerService) ShowJokers() {
 	fmt.Printf("%v", s.runInfo.JokerCards)
+}
+
+func (s *pokerService) GetJokerCards() []entity.JokerCard {
+	return s.runInfo.GetJokerCards()
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig

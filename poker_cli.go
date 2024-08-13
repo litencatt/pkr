@@ -49,7 +49,6 @@ func (cli *PokerCLI) Run() error {
 			itemName := strings.Split(selectShopItem[0], ":")[0]
 			cli.service.AddShopItem(itemName)
 		}
-		cli.service.ShowJokers()
 
 		if cli.service.IsStartRound() {
 			rounds := cli.service.GetRounds()
@@ -62,6 +61,7 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 
+			jokerCards := cli.service.GetJokerCards()
 			cli.service.StartRound(jokerCards)
 		}
 
