@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/litencatt/pkr/entity"
 )
 
@@ -27,6 +29,11 @@ type PokerService interface {
 	GetEnableActions() []string
 
 	SetAction(string)
+
+	ShopOpen() []string
+	AddShopItem(string) error
+
+	ShowJokers()
 }
 
 type pokerService struct {
@@ -190,6 +197,26 @@ func (s *pokerService) IsRoundWin() bool {
 
 func (s *pokerService) GetRounds() int {
 	return s.runInfo.Rounds
+}
+
+func (s *pokerService) ShopOpen() []string {
+	if s.runInfo.Rounds <= 1 {
+		// return nil
+	}
+
+	shop := entity.NewShop()
+	return shop.GetShopItems()
+}
+
+func (s *pokerService) AddShopItem(itemName string) error {
+	jokerCards := entity.GetJokerCards()
+	s.runInfo.AddJokerCard(jokerCards[itemName])
+
+	return nil
+}
+
+func (s *pokerService) ShowJokers() {
+	fmt.Printf("%v", s.runInfo.JokerCards)
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig

@@ -3,6 +3,7 @@ package pkr
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -37,6 +38,19 @@ func (cli *PokerCLI) Run() error {
 	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	for {
+		var selectShopItem []string
+		if shopItems := cli.service.ShopOpen(); shopItems != nil {
+			promptMs := &survey.MultiSelect{
+				Message: "Select a shop item",
+				Options: shopItems,
+			}
+			survey.AskOne(promptMs, &selectShopItem)
+			fmt.Printf("Selected shop item: %s\n", selectShopItem)
+			itemName := strings.Split(selectShopItem[0], ":")[0]
+			cli.service.AddShopItem(itemName)
+		}
+		cli.service.ShowJokers()
+
 		if cli.service.IsStartRound() {
 			rounds := cli.service.GetRounds()
 			fmt.Println("")
