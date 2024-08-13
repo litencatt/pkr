@@ -62,7 +62,7 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 
-			cli.service.StartRound()
+			cli.service.StartRound(jokerCards)
 		}
 
 		roundStats := cli.service.GetRoundStats()

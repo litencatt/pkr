@@ -9,6 +9,7 @@ type PokerRound struct {
 	HandCards          []Trump
 	RemainCards        []Trump
 	SelectedCards      []Trump
+	Jokers             []JokerCard
 	Stats              RoundStats
 	BeforeSelectAction string
 }

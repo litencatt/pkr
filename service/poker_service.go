@@ -8,7 +8,7 @@ import (
 
 type PokerService interface {
 	IsStartRound() bool
-	StartRound() error
+	StartRound([]entity.JokerCard) error
 	GetRounds() int
 	IsRoundWin() bool
 	NextRound() error
@@ -82,7 +82,7 @@ func (s *pokerService) IsStartRound() bool {
 	return s.runInfo.StartNext
 }
 
-func (s *pokerService) StartRound() error {
+func (s *pokerService) StartRound([]entity.JokerCard) error {
 	s.runInfo.UnsetStartNext()
 
 	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
