@@ -1,6 +1,8 @@
 package entity
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type ShopItemType string
 
@@ -20,16 +22,19 @@ type ShopItem struct {
 }
 
 func NewShop() *Shop {
-	return &Shop{
-		Items: []ShopItem{
-			{
-				Name:        "Joker1",
-				Description: "Add 1 multiples",
-				Price:       100,
-				Type:        string(Joker),
-			},
-		},
+	var items []ShopItem
+
+	joker := GetJokerCards()
+	for name, jokerCard := range joker {
+		items = append(items, ShopItem{
+			Name:        name,
+			Description: jokerCard.Effects.Description,
+			Price:       100,
+			Type:        string(Joker),
+		})
 	}
+
+	return &Shop{Items: items}
 }
 
 func (s *Shop) GetShopItems() []string {

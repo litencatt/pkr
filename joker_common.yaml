@@ -2,6 +2,8 @@
 - name: Joker1
   description: Add 1 multiples
   rarity: Common
+  price: 10
 - name: Joker2
   description: Add 2 multiples
   rarity: Common
+  price: 20
