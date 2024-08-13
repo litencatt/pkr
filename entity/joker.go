@@ -1,8 +1,9 @@
 package entity
 
 import (
-	"encoding/json"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Rarity string
@@ -19,14 +20,14 @@ type JokerCard struct {
 }
 
 type JokerEffect struct {
-	Rarity      Rarity `json:"rarity"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Effect      func() `json:"-"`
+	Rarity      Rarity `yaml:"rarity"`
+	Name        string `yaml:"name"`
+	Description string `yaml:"description"`
+	Effect      func() `yaml:"-"`
 }
 
 func GetJokerCards() map[string]JokerCard {
-	jokers, err := LoadJokerCardsFromJSON("./joker_common.json")
+	jokers, err := LoadJokerCardsFromJSON("./joker_common.yaml")
 	if err != nil {
 		return nil
 	}
@@ -40,15 +41,15 @@ func LoadJokerCardsFromJSON(filename string) (*map[string]JokerCard, error) {
 		return nil, err
 	}
 
-	var jokerData map[string]JokerEffect
-	err = json.Unmarshal(data, &jokerData)
+	var jokerList []JokerEffect
+	err = yaml.Unmarshal(data, &jokerList)
 	if err != nil {
 		return nil, err
 	}
 
 	jokerCards := make(map[string]JokerCard)
-	for key, effect := range jokerData {
-		jokerCards[key] = JokerCard{Effects: &effect}
+	for _, card := range jokerList {
+		jokerCards[card.Name] = JokerCard{Effects: &card}
 	}
 
 	return &jokerCards, nil
