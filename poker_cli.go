@@ -166,7 +166,7 @@ func (cli *PokerCLI) Run() error {
 
 			prompt := &survey.Select{
 				Message: "You win this round!",
-				Options: []string{"Next"},
+				Options: []string{"Next Round"},
 			}
 			if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
 				fmt.Println("interrupted")
