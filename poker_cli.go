@@ -3,6 +3,8 @@ package pkr
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -27,8 +29,34 @@ func NewPokerCLI() *PokerCLI {
 	}
 }
 
+var clear map[string]func()
+
+func init() {
+	clear = make(map[string]func()) //Initialize it
+	clear["linux"] = func() {
+		cmd := exec.Command("clear") //Linux example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+	clear["darwin"] = func() {
+		cmd := exec.Command("clear") //Linux example, its tested
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+}
+
+func ClearTerminal() {
+	value, ok := clear[runtime.GOOS]
+	if ok {
+		value()
+	} else {
+		panic("Your platform is unsupported! I can't clear terminal screen :(")
+	}
+}
+
 func (cli *PokerCLI) Run() error {
 	sleepSec := 1
+	ClearTerminal()
 
 	fmt.Println("*********************")
 	fmt.Println("* Welcome to Poker! *")
@@ -37,6 +65,7 @@ func (cli *PokerCLI) Run() error {
 	time.Sleep(time.Duration(sleepSec) * time.Second)
 
 	for {
+		ClearTerminal()
 		if cli.service.IsStartRound() {
 			rounds := cli.service.GetRounds()
 			fmt.Println("")
@@ -129,8 +158,8 @@ func (cli *PokerCLI) Run() error {
 			}
 
 			fmt.Printf("\nHand: %s", r.HandType)
-			fmt.Printf("\nChip: %d, Mult: %d\n", r.Chip, r.Mult)
-			fmt.Printf("\nScore: %d\n\n", r.Score)
+			fmt.Printf("\nChip: %d, Mult: %d", r.Chip, r.Mult)
+			fmt.Printf("\nHand Score: %d\n\n", r.Score)
 
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 		}
