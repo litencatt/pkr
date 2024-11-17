@@ -1,12 +1,14 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/litencatt/pkr/entity"
 )
 
 type PokerService interface {
 	IsStartRound() bool
-	StartRound() error
+	StartRound([]entity.JokerCard) error
 	GetRounds() int
 	IsRoundWin() bool
 	NextRound() error
@@ -27,6 +29,12 @@ type PokerService interface {
 	GetEnableActions() []string
 
 	SetAction(string)
+
+	ShopOpen() []string
+	AddShopItem(string) error
+
+	ShowJokers()
+	GetJokerCards() []entity.JokerCard
 }
 
 type pokerService struct {
@@ -75,7 +83,7 @@ func (s *pokerService) IsStartRound() bool {
 	return s.runInfo.StartNext
 }
 
-func (s *pokerService) StartRound() error {
+func (s *pokerService) StartRound([]entity.JokerCard) error {
 	s.runInfo.UnsetStartNext()
 
 	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
@@ -151,10 +159,24 @@ func (s *pokerService) PlayHand() (entity.PokerHandStats, error) {
 	// get hand type and base chip and mult
 	handType := round.PlayHand()
 	chip, mult := s.GetChipAndMult(handType, 1)
+	fmt.Printf("PlayHand() - chip: %d, mult: %d\n", chip, mult)
 
 	// get card rank and add to chip
 	handsRankTotal := round.GetSelectCardsRankTotal()
 	chip += handsRankTotal
+	fmt.Printf("Calc handsRankTotal: %d\n", handsRankTotal)
+	fmt.Printf("chip: %d, mult: %d\n", chip, mult)
+
+	// apply joker card effect
+	jokerCards := s.GetJokerCards()
+	for _, joker := range jokerCards {
+		if joker.Effects.IsApplicable(round.SelectedCards) {
+			entity.ApplyEffect(joker.Effects, &chip, &mult)
+		}
+	}
+	fmt.Printf("After apply joker card effect - chip: %d, mult: %d\n", chip, mult)
+
+	// calculate score
 	score := chip * mult
 	round.Stats.TotalScore += score
 
@@ -190,6 +212,30 @@ func (s *pokerService) IsRoundWin() bool {
 
 func (s *pokerService) GetRounds() int {
 	return s.runInfo.Rounds
+}
+
+func (s *pokerService) ShopOpen() []string {
+	if s.runInfo.Rounds <= 1 {
+		return nil
+	}
+
+	shop := entity.NewShop()
+	return shop.GetShopItems()
+}
+
+func (s *pokerService) AddShopItem(itemName string) error {
+	jokerCards := entity.GetJokerCards()
+	s.runInfo.AddJokerCard(jokerCards[itemName])
+
+	return nil
+}
+
+func (s *pokerService) ShowJokers() {
+	fmt.Printf("%v", s.runInfo.JokerCards)
+}
+
+func (s *pokerService) GetJokerCards() []entity.JokerCard {
+	return s.runInfo.GetJokerCards()
 }
 
 // NewPokerServiceConfig returns a new PokerServiceConfig

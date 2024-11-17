@@ -36,6 +36,7 @@ type RunInfo struct {
 	PokerHands      *PokerHands
 	Rounds          int
 	StartNext       bool
+	JokerCards      []JokerCard
 }
 
 func NewRunInfo() *RunInfo {
@@ -76,4 +77,12 @@ func (r *RunInfo) NextBlind() error {
 func (r *RunInfo) NextAnte() error {
 	r.AnteIndex += 1
 	return nil
+}
+
+func (s *RunInfo) AddJokerCard(jokerCard JokerCard) {
+	s.JokerCards = append(s.JokerCards, jokerCard)
+}
+
+func (s *RunInfo) GetJokerCards() []JokerCard {
+	return s.JokerCards
 }
