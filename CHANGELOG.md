@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.7](https://github.com/litencatt/pkr/compare/v0.0.6...v0.0.7) - 2024-11-17
+- Clear terminal by @litencatt in https://github.com/litencatt/pkr/pull/26
+
 ## [v0.0.6](https://github.com/litencatt/pkr/compare/v0.0.5...v0.0.6) - 2024-08-10
 - Replace to PokerService instance by @litencatt in https://github.com/litencatt/pkr/pull/20
 - Add cancel actionn by @litencatt in https://github.com/litencatt/pkr/pull/22
