@@ -158,8 +158,8 @@ func (cli *PokerCLI) Run() error {
 			}
 
 			fmt.Printf("\nHand: %s", r.HandType)
-			fmt.Printf("\nChip: %d, Mult: %d\n", r.Chip, r.Mult)
-			fmt.Printf("\nScore: %d\n\n", r.Score)
+			fmt.Printf("\nChip: %d, Mult: %d", r.Chip, r.Mult)
+			fmt.Printf("\nHand Score: %d\n\n", r.Score)
 
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 		}
