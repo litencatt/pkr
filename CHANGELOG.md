@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.1.0](https://github.com/litencatt/pkr/compare/v0.0.7...v0.1.0) - 2025-09-20
+- Fix pkr specs by @litencatt in https://github.com/litencatt/pkr/pull/29
+
 ## [v0.0.7](https://github.com/litencatt/pkr/compare/v0.0.6...v0.0.7) - 2025-09-20
 - Clear terminal by @litencatt in https://github.com/litencatt/pkr/pull/26
 - Add comprehensive testing, CI/CD pipeline, and code quality improvements by @litencatt in https://github.com/litencatt/pkr/pull/28
