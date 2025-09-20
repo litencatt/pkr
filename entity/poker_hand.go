@@ -42,7 +42,6 @@ type PokerHandStats struct {
 	Score    int
 }
 
-// FIXME: Set the correct chip and mult values for each hand type and level
 func NewPokerHands() *PokerHands {
 	return &PokerHands{
 		PokerHands: []PokerHand{
@@ -50,7 +49,7 @@ func NewPokerHands() *PokerHands {
 				HandType: HighCard,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 5, Mult: 1},
-					{Level: 2, Chip: 15, Mult: 2},
+					{Level: 2, Chip: 10, Mult: 1},
 					{Level: 3, Chip: 15, Mult: 1},
 					{Level: 4, Chip: 20, Mult: 1},
 					{Level: 5, Chip: 25, Mult: 1},
@@ -65,129 +64,129 @@ func NewPokerHands() *PokerHands {
 				HandType: OnePair,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 10, Mult: 2},
-					{Level: 2, Chip: 4, Mult: 1},
-					{Level: 3, Chip: 6, Mult: 1},
-					{Level: 4, Chip: 8, Mult: 1},
-					{Level: 5, Chip: 10, Mult: 1},
-					{Level: 6, Chip: 12, Mult: 1},
-					{Level: 7, Chip: 14, Mult: 1},
-					{Level: 8, Chip: 16, Mult: 1},
-					{Level: 9, Chip: 18, Mult: 1},
-					{Level: 10, Chip: 20, Mult: 1},
+					{Level: 2, Chip: 15, Mult: 2},
+					{Level: 3, Chip: 20, Mult: 2},
+					{Level: 4, Chip: 25, Mult: 2},
+					{Level: 5, Chip: 30, Mult: 2},
+					{Level: 6, Chip: 35, Mult: 2},
+					{Level: 7, Chip: 40, Mult: 2},
+					{Level: 8, Chip: 45, Mult: 2},
+					{Level: 9, Chip: 50, Mult: 2},
+					{Level: 10, Chip: 60, Mult: 2},
 				},
 			},
 			{
 				HandType: TwoPair,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 20, Mult: 2},
-					{Level: 2, Chip: 6, Mult: 1},
-					{Level: 3, Chip: 9, Mult: 1},
-					{Level: 4, Chip: 12, Mult: 1},
-					{Level: 5, Chip: 15, Mult: 1},
-					{Level: 6, Chip: 18, Mult: 1},
-					{Level: 7, Chip: 21, Mult: 1},
-					{Level: 8, Chip: 24, Mult: 1},
-					{Level: 9, Chip: 27, Mult: 1},
-					{Level: 10, Chip: 30, Mult: 1},
+					{Level: 2, Chip: 25, Mult: 2},
+					{Level: 3, Chip: 30, Mult: 2},
+					{Level: 4, Chip: 35, Mult: 2},
+					{Level: 5, Chip: 40, Mult: 2},
+					{Level: 6, Chip: 45, Mult: 2},
+					{Level: 7, Chip: 50, Mult: 2},
+					{Level: 8, Chip: 55, Mult: 2},
+					{Level: 9, Chip: 60, Mult: 2},
+					{Level: 10, Chip: 70, Mult: 2},
 				},
 			},
 			{
 				HandType: ThreeOfAKind,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 30, Mult: 3},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 40, Mult: 3},
+					{Level: 3, Chip: 50, Mult: 3},
+					{Level: 4, Chip: 60, Mult: 3},
+					{Level: 5, Chip: 70, Mult: 3},
+					{Level: 6, Chip: 80, Mult: 3},
+					{Level: 7, Chip: 90, Mult: 3},
+					{Level: 8, Chip: 100, Mult: 3},
+					{Level: 9, Chip: 110, Mult: 3},
+					{Level: 10, Chip: 130, Mult: 3}},
 			},
 			{
 				HandType: Straight,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 30, Mult: 4},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 40, Mult: 4},
+					{Level: 3, Chip: 50, Mult: 4},
+					{Level: 4, Chip: 60, Mult: 4},
+					{Level: 5, Chip: 70, Mult: 4},
+					{Level: 6, Chip: 80, Mult: 4},
+					{Level: 7, Chip: 90, Mult: 4},
+					{Level: 8, Chip: 100, Mult: 4},
+					{Level: 9, Chip: 110, Mult: 4},
+					{Level: 10, Chip: 130, Mult: 4}},
 			},
 			{
 				HandType: Flush,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 35, Mult: 4},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 45, Mult: 4},
+					{Level: 3, Chip: 55, Mult: 4},
+					{Level: 4, Chip: 65, Mult: 4},
+					{Level: 5, Chip: 75, Mult: 4},
+					{Level: 6, Chip: 85, Mult: 4},
+					{Level: 7, Chip: 95, Mult: 4},
+					{Level: 8, Chip: 105, Mult: 4},
+					{Level: 9, Chip: 115, Mult: 4},
+					{Level: 10, Chip: 135, Mult: 4}},
 			},
 			{
 				HandType: FullHouse,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 40, Mult: 4},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 55, Mult: 4},
+					{Level: 3, Chip: 70, Mult: 4},
+					{Level: 4, Chip: 85, Mult: 4},
+					{Level: 5, Chip: 100, Mult: 4},
+					{Level: 6, Chip: 115, Mult: 4},
+					{Level: 7, Chip: 130, Mult: 4},
+					{Level: 8, Chip: 145, Mult: 4},
+					{Level: 9, Chip: 160, Mult: 4},
+					{Level: 10, Chip: 190, Mult: 4}},
 			},
 			{
 				HandType: FourOfAKind,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 60, Mult: 7},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 80, Mult: 7},
+					{Level: 3, Chip: 100, Mult: 7},
+					{Level: 4, Chip: 120, Mult: 7},
+					{Level: 5, Chip: 140, Mult: 7},
+					{Level: 6, Chip: 160, Mult: 7},
+					{Level: 7, Chip: 180, Mult: 7},
+					{Level: 8, Chip: 200, Mult: 7},
+					{Level: 9, Chip: 220, Mult: 7},
+					{Level: 10, Chip: 260, Mult: 7}},
 			},
 			{
 				HandType: StraightFlush,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 100, Mult: 8},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 130, Mult: 8},
+					{Level: 3, Chip: 160, Mult: 8},
+					{Level: 4, Chip: 190, Mult: 8},
+					{Level: 5, Chip: 220, Mult: 8},
+					{Level: 6, Chip: 250, Mult: 8},
+					{Level: 7, Chip: 280, Mult: 8},
+					{Level: 8, Chip: 310, Mult: 8},
+					{Level: 9, Chip: 340, Mult: 8},
+					{Level: 10, Chip: 400, Mult: 8}},
 			},
 			{
 				HandType: RoyalFlush,
 				Level: []PokerHandLevel{
 					{Level: 1, Chip: 100, Mult: 8},
-					{Level: 2, Chip: 2, Mult: 1},
-					{Level: 3, Chip: 3, Mult: 1},
-					{Level: 4, Chip: 4, Mult: 1},
-					{Level: 5, Chip: 5, Mult: 1},
-					{Level: 6, Chip: 6, Mult: 1},
-					{Level: 7, Chip: 7, Mult: 1},
-					{Level: 8, Chip: 8, Mult: 1},
-					{Level: 9, Chip: 9, Mult: 1},
-					{Level: 10, Chip: 10, Mult: 1}},
+					{Level: 2, Chip: 140, Mult: 8},
+					{Level: 3, Chip: 180, Mult: 8},
+					{Level: 4, Chip: 220, Mult: 8},
+					{Level: 5, Chip: 260, Mult: 8},
+					{Level: 6, Chip: 300, Mult: 8},
+					{Level: 7, Chip: 340, Mult: 8},
+					{Level: 8, Chip: 380, Mult: 8},
+					{Level: 9, Chip: 420, Mult: 8},
+					{Level: 10, Chip: 500, Mult: 8}},
 			},
 		},
 	}
@@ -223,30 +222,64 @@ func isFlush(hand []Trump) bool {
 
 // isStraight checks if the hand forms a sequential ranking.
 func isStraight(hand []Trump) bool {
-	if len(hand) < 5 {
+	if len(hand) != 5 {
 		return false
 	}
 
-	// Sort the hand by rank (implement the sorting logic based on your Rank definition)
-	sort.Slice(hand, func(i, j int) bool {
-		// Implement the comparison logic for your Rank type
-		return hand[i].Rank < hand[j].Rank
+	// Sort the hand by sort order (2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A)
+	sortedHand := make([]Trump, len(hand))
+	copy(sortedHand, hand)
+	sort.Slice(sortedHand, func(i, j int) bool {
+		return sortedHand[i].GetSortOrder() < sortedHand[j].GetSortOrder()
 	})
 
-	// Check for Ace-low straight
-	if hand[0].Rank == Two && hand[1].Rank == Three && hand[2].Rank == Four && hand[3].Rank == Five && hand[4].Rank == Ace {
+	// Check for Ace-low straight (A, 2, 3, 4, 5)
+	if sortedHand[0].Rank == Two && sortedHand[1].Rank == Three &&
+		sortedHand[2].Rank == Four && sortedHand[3].Rank == Five &&
+		sortedHand[4].Rank == Ace {
 		return true
 	}
 
 	// Check for standard straight
-	for i := 0; i < len(hand)-1; i++ {
-		// convert Rank string to int
-		rank1 := hand[i].GetRankNumber()
-		rank2 := hand[i+1].GetRankNumber()
+	for i := 0; i < len(sortedHand)-1; i++ {
+		rank1 := sortedHand[i].GetSortOrder()
+		rank2 := sortedHand[i+1].GetSortOrder()
 		if rank2-rank1 != 1 {
 			return false
 		}
 	}
+	return true
+}
+
+// isRoyalFlush checks if the hand is a Royal Flush (10, J, Q, K, A).
+func isRoyalFlush(hand []Trump) bool {
+	if len(hand) != 5 {
+		return false
+	}
+
+	requiredRanks := map[Rank]bool{
+		Ten:   false,
+		Jack:  false,
+		Queen: false,
+		King:  false,
+		Ace:   false,
+	}
+
+	for _, card := range hand {
+		if _, exists := requiredRanks[card.Rank]; exists {
+			requiredRanks[card.Rank] = true
+		} else {
+			return false
+		}
+	}
+
+	// Check if all required ranks are present
+	for _, present := range requiredRanks {
+		if !present {
+			return false
+		}
+	}
+
 	return true
 }
 
@@ -265,7 +298,8 @@ func EvaluateHand(hand []Trump) HandType {
 	isStraight := isStraight(hand)
 
 	if isFlush && isStraight {
-		if hand[0].Rank == Ten {
+		// Check for Royal Flush (10, J, Q, K, A)
+		if isRoyalFlush(hand) {
 			return RoyalFlush
 		}
 		return StraightFlush

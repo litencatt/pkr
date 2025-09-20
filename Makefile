@@ -30,3 +30,6 @@ release:
 	git tag ${NEXT_VER}
 	git push origin main --tag
 	goreleaser --rm-dist
+
+dcbash:
+	docker compose exec app bash
