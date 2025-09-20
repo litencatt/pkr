@@ -34,14 +34,14 @@ var clear map[string]func()
 func init() {
 	clear = make(map[string]func()) //Initialize it
 	clear["linux"] = func() {
-		cmd := exec.Command("clear") //Linux example, its tested
+		cmd := exec.Command("clear") // Linux example, its tested
 		cmd.Stdout = os.Stdout
-		cmd.Run()
+		_ = cmd.Run()
 	}
 	clear["darwin"] = func() {
-		cmd := exec.Command("clear") //Linux example, its tested
+		cmd := exec.Command("clear") // Linux example, its tested
 		cmd.Stdout = os.Stdout
-		cmd.Run()
+		_ = cmd.Run()
 	}
 }
 
@@ -77,7 +77,9 @@ func (cli *PokerCLI) Run() error {
 			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 
-			cli.service.StartRound()
+			if err := cli.service.StartRound(); err != nil {
+				return err
+			}
 		}
 
 		roundStats := cli.service.GetRoundStats()
@@ -139,7 +141,9 @@ func (cli *PokerCLI) Run() error {
 			os.Exit(0)
 		}
 
-		cli.service.SelectCards(selectCards)
+		if err := cli.service.SelectCards(selectCards); err != nil {
+			return err
+		}
 		cli.service.SetAction(selectAction)
 		if selectAction == "Discard" {
 			if err := cli.service.DiscardHand(); err != nil {
@@ -148,7 +152,9 @@ func (cli *PokerCLI) Run() error {
 			continue
 		}
 		if selectAction == "Cancel" {
-			cli.service.CancelHand()
+			if err := cli.service.CancelHand(); err != nil {
+				return err
+			}
 			continue
 		}
 		if selectAction == "Play" {
@@ -187,7 +193,9 @@ func (cli *PokerCLI) Run() error {
 				fmt.Println("interrupted")
 				os.Exit(0)
 			}
-			cli.service.NextRound()
+			if err := cli.service.NextRound(); err != nil {
+				return err
+			}
 			continue
 		}
 

@@ -100,7 +100,9 @@ func (s *pokerService) GetCurrentAnteAmount() int {
 }
 
 func (s *pokerService) NextRound() error {
-	s.runInfo.NextRound()
+	if err := s.runInfo.NextRound(); err != nil {
+		return err
+	}
 	scoreAtLeast := int(float64(s.GetCurrentAnteAmount()) * s.GetCurrentBlindMulti())
 	s.round = entity.NewPokerRound(
 		s.runInfo.Deck,
