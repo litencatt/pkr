@@ -1,0 +1,41 @@
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+
+# Dependencies
+node_modules/
+vendor/
+
+# Generated files
+coverage.html
+coverage.out
+*.sarif
+
+# Binaries
+pkr
+*.exe
+
+# Go generated files
+*.pb.go
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+
+# Temporary files
+tmp/
+temp/
