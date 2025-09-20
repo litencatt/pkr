@@ -114,11 +114,26 @@ make release     # Create and push git tag, run goreleaser
   ```
 - **コード品質チェックを実行する**
   ```bash
-  docker compose exec app go fmt ./...  # フォーマット
+  docker compose exec app go fmt ./...  # Goコードフォーマット
   docker compose exec app go vet ./...  # 静的解析
+  ```
+- **MarkdownとYAMLファイルのフォーマット（ローカル確認用）**
+  ```bash
+  # Prettierのインストール
+  npm install -g prettier@3.3.3 @prettier/plugin-yaml@1.0.1
+  
+  # フォーマット実行
+  prettier --write "**/*.md"           # Markdownフォーマット
+  prettier --write "**/*.yml" "**/*.yaml"  # YAMLフォーマット
   ```
 - テスト失敗やビルドエラーが発生した場合は修正してからコミット
 - フォーマット変更があった場合は追加のコミットとして記録
+
+### CI/CD Automation
+- **自動フォーマット**: mainブランチへのpush時にMarkdown/YAMLファイルが自動フォーマットされる
+- **自動コミット**: フォーマット変更があった場合、GitHub Actionが自動的にコミット
+- **コード品質**: Go lint、テスト、セキュリティスキャンが自動実行
+- **設定ファイル**: `.prettierrc.yml`でフォーマット設定、`.prettierignore`で除外設定
 
 ## Important Notes
 
