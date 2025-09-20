@@ -54,6 +54,38 @@ func ClearTerminal() {
 	}
 }
 
+func printBox(title, content string) {
+	fmt.Println("┌─────────────────────────────────────────┐")
+	fmt.Printf("│ %-39s │\n", title)
+	fmt.Println("├─────────────────────────────────────────┤")
+	fmt.Printf("│ %-39s │\n", content)
+	fmt.Println("└─────────────────────────────────────────┘")
+}
+
+func printProgressBar(current, target int) {
+	barWidth := 30
+	var progress float64
+	if target > 0 {
+		progress = float64(current) / float64(target)
+		if progress > 1.0 {
+			progress = 1.0
+		}
+	}
+
+	filled := int(progress * float64(barWidth))
+	bar := ""
+	for i := 0; i < barWidth; i++ {
+		if i < filled {
+			bar += "█"
+		} else {
+			bar += "░"
+		}
+	}
+
+	percentage := int(progress * 100)
+	fmt.Printf("📊 Score Progress: [%s] %d%% (%d/%d)\n", bar, percentage, current, target)
+}
+
 func (cli *PokerCLI) Run() error {
 	sleepSec := 1
 	ClearTerminal()
@@ -68,13 +100,14 @@ func (cli *PokerCLI) Run() error {
 		ClearTerminal()
 		if cli.service.IsStartRound() {
 			rounds := cli.service.GetRounds()
-			fmt.Println("")
-			fmt.Printf("Round %d start\n\n", rounds)
-			time.Sleep(time.Duration(sleepSec) * time.Second)
-
 			ante := cli.service.GetCurrentAnteAmount()
 			blind := cli.service.GetCurrentBlindMulti()
-			fmt.Printf("Ante:%d, Blind:%v\n\n", ante, blind)
+
+			printBox(
+				fmt.Sprintf("🃏 ROUND %d START", rounds),
+				fmt.Sprintf("Ante: %d  |  Blind: %.1f", ante, blind),
+			)
+			fmt.Println()
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 
 			if err := cli.service.StartRound(); err != nil {
@@ -83,9 +116,8 @@ func (cli *PokerCLI) Run() error {
 		}
 
 		roundStats := cli.service.GetRoundStats()
-		fmt.Printf("Score at least: %d\n", roundStats.ScoreAtLeast)
-		fmt.Printf("Round score: %d\n", roundStats.TotalScore)
-		fmt.Printf("Hands: %d, Discards: %d\n", roundStats.Hands, roundStats.Discards)
+		printProgressBar(roundStats.TotalScore, roundStats.ScoreAtLeast)
+		fmt.Printf("🃏 Hands: %d  |  🗑️  Discards: %d\n", roundStats.Hands, roundStats.Discards)
 		fmt.Println()
 
 		// Draw cards
@@ -94,10 +126,11 @@ func (cli *PokerCLI) Run() error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("[Draw", drawNum, "cards]")
+		fmt.Printf("🎲 Draw %d cards\n", drawNum)
 		if cli.DebugMode {
+			fmt.Println("────────── Drawn Cards ──────────")
 			for _, card := range cards {
-				fmt.Println(card.String())
+				fmt.Printf("  • %s\n", card.String())
 			}
 			fmt.Println()
 		}
@@ -123,9 +156,13 @@ func (cli *PokerCLI) Run() error {
 			fmt.Println("Please select less than 5 cards")
 			fmt.Println()
 		}
-		fmt.Print("[Selected cards]\n")
-		for _, card := range selectCards {
-			fmt.Println(card)
+		fmt.Println("✅ Selected Cards:")
+		if len(selectCards) > 0 {
+			for _, card := range selectCards {
+				fmt.Printf("  🃏 %s\n", card)
+			}
+		} else {
+			fmt.Println("  (No cards selected)")
 		}
 		fmt.Println()
 
@@ -163,31 +200,40 @@ func (cli *PokerCLI) Run() error {
 				return err
 			}
 
-			fmt.Printf("\nHand: %s", r.HandType)
-			fmt.Printf("\nChip: %d, Mult: %d", r.Chip, r.Mult)
-			fmt.Printf("\nHand Score: %d\n\n", r.Score)
+			fmt.Println("┌─────────────────────────────────────────┐")
+			fmt.Printf("│ 🎯 HAND RESULT: %-22s │\n", r.HandType)
+			fmt.Println("├─────────────────────────────────────────┤")
+			fmt.Printf("│ 💰 Chip: %-6d  |  ✨ Mult: %-6d │\n", r.Chip, r.Mult)
+			fmt.Printf("│ 🏆 Score: %-29d │\n", r.Score)
+			fmt.Println("└─────────────────────────────────────────┘")
+			fmt.Println()
 
 			time.Sleep(time.Duration(sleepSec) * time.Second)
 		}
 
 		// show remain cards
 		if cli.DebugMode {
-			fmt.Print("[Remain cards]\n")
+			fmt.Println("────────── Remaining Cards ──────────")
 			remainCards := cli.service.GetRemainCardString()
-			for _, card := range remainCards {
-				fmt.Println(card)
+			if len(remainCards) > 0 {
+				for _, card := range remainCards {
+					fmt.Printf("  • %s\n", card)
+				}
+			} else {
+				fmt.Println("  (No remaining cards)")
 			}
 			fmt.Println()
 		}
 
 		stats := cli.service.GetRoundStats()
 		if cli.service.IsRoundWin() {
-			fmt.Printf("Score at least: %d, Round score: %d\n", stats.ScoreAtLeast, stats.TotalScore)
-			fmt.Println("")
+			fmt.Println("🎉 ROUND CLEAR! 🎉")
+			printProgressBar(stats.TotalScore, stats.ScoreAtLeast)
+			fmt.Println()
 
 			prompt := &survey.Select{
-				Message: "You win this round!",
-				Options: []string{"Next"},
+				Message: "🏆 You win this round! Ready for next?",
+				Options: []string{"Next Round →"},
 			}
 			if err := survey.AskOne(prompt, &selectAction); err == terminal.InterruptErr {
 				fmt.Println("interrupted")
@@ -200,8 +246,9 @@ func (cli *PokerCLI) Run() error {
 		}
 
 		if stats.Hands == 0 {
-			fmt.Printf("Score at least: %d, Round score: %d\n", stats.ScoreAtLeast, stats.TotalScore)
-			fmt.Println("You lose!")
+			fmt.Println("💀 GAME OVER 💀")
+			printProgressBar(stats.TotalScore, stats.ScoreAtLeast)
+			fmt.Println("😢 Better luck next time!")
 			break
 		}
 
