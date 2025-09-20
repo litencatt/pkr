@@ -223,26 +223,28 @@ func isFlush(hand []Trump) bool {
 
 // isStraight checks if the hand forms a sequential ranking.
 func isStraight(hand []Trump) bool {
-	if len(hand) < 5 {
+	if len(hand) != 5 {
 		return false
 	}
 
-	// Sort the hand by rank (implement the sorting logic based on your Rank definition)
-	sort.Slice(hand, func(i, j int) bool {
-		// Implement the comparison logic for your Rank type
-		return hand[i].Rank < hand[j].Rank
+	// Sort the hand by sort order (2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A)
+	sortedHand := make([]Trump, len(hand))
+	copy(sortedHand, hand)
+	sort.Slice(sortedHand, func(i, j int) bool {
+		return sortedHand[i].GetSortOrder() < sortedHand[j].GetSortOrder()
 	})
 
-	// Check for Ace-low straight
-	if hand[0].Rank == Two && hand[1].Rank == Three && hand[2].Rank == Four && hand[3].Rank == Five && hand[4].Rank == Ace {
+	// Check for Ace-low straight (A, 2, 3, 4, 5)
+	if sortedHand[0].Rank == Two && sortedHand[1].Rank == Three && 
+	   sortedHand[2].Rank == Four && sortedHand[3].Rank == Five && 
+	   sortedHand[4].Rank == Ace {
 		return true
 	}
 
 	// Check for standard straight
-	for i := 0; i < len(hand)-1; i++ {
-		// convert Rank string to int
-		rank1 := hand[i].GetRankNumber()
-		rank2 := hand[i+1].GetRankNumber()
+	for i := 0; i < len(sortedHand)-1; i++ {
+		rank1 := sortedHand[i].GetSortOrder()
+		rank2 := sortedHand[i+1].GetSortOrder()
 		if rank2-rank1 != 1 {
 			return false
 		}
