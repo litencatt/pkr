@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.1.1](https://github.com/litencatt/pkr/compare/v0.1.0...v0.1.1) - 2025-09-20
+- Add how to play by @litencatt in https://github.com/litencatt/pkr/pull/31
+
 ## [v0.1.0](https://github.com/litencatt/pkr/compare/v0.0.7...v0.1.0) - 2025-09-20
 - Fix pkr specs by @litencatt in https://github.com/litencatt/pkr/pull/29
 
