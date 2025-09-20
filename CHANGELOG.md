@@ -1,25 +1,31 @@
 # Changelog
 
 ## [v0.1.1](https://github.com/litencatt/pkr/compare/v0.1.0...v0.1.1) - 2025-09-20
+
 - Add how to play by @litencatt in https://github.com/litencatt/pkr/pull/31
 
 ## [v0.1.0](https://github.com/litencatt/pkr/compare/v0.0.7...v0.1.0) - 2025-09-20
+
 - Fix pkr specs by @litencatt in https://github.com/litencatt/pkr/pull/29
 
 ## [v0.0.7](https://github.com/litencatt/pkr/compare/v0.0.6...v0.0.7) - 2025-09-20
+
 - Clear terminal by @litencatt in https://github.com/litencatt/pkr/pull/26
 - Add comprehensive testing, CI/CD pipeline, and code quality improvements by @litencatt in https://github.com/litencatt/pkr/pull/28
 
 ## [v0.0.6](https://github.com/litencatt/pkr/compare/v0.0.5...v0.0.6) - 2024-08-10
+
 - Replace to PokerService instance by @litencatt in https://github.com/litencatt/pkr/pull/20
 - Add cancel actionn by @litencatt in https://github.com/litencatt/pkr/pull/22
 - Next round with poker service by @litencatt in https://github.com/litencatt/pkr/pull/23
 - Refactor poker structs by @litencatt in https://github.com/litencatt/pkr/pull/24
 
 ## [v0.0.5](https://github.com/litencatt/pkr/compare/v0.0.4...v0.0.5) - 2024-08-04
+
 - Fix dev settings by @litencatt in https://github.com/litencatt/pkr/pull/15
 
 ## [v0.0.4](https://github.com/litencatt/pkr/compare/v0.0.3...v0.0.4) - 2024-08-04
+
 - Rename to pkr by @litencatt in https://github.com/litencatt/pkr/pull/17
 
 ## [v0.0.3](https://github.com/litencatt/pkr/compare/v0.0.2...v0.0.3) - 2024-03-24

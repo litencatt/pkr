@@ -28,7 +28,6 @@ linters-settings:
     # put imports beginning with prefix after 3rd-party packages
     local-prefixes: github.com/litencatt/pkr
 
-
   revive:
     # minimal confidence for issues, default is 0.8
     confidence: 0.8
@@ -36,7 +35,6 @@ linters-settings:
   gocyclo:
     # minimal code complexity to report, 30 by default
     min-complexity: 15
-
 
   dupl:
     # tokens count to trigger issue, 150 by default
@@ -56,7 +54,6 @@ linters-settings:
     # max line length, lines longer will be reported. Default is 120.
     line-length: 120
 
-
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     check-exported: false
@@ -64,8 +61,6 @@ linters-settings:
   nakedret:
     # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
     max-func-lines: 30
-  
-
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
