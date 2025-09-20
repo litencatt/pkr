@@ -88,6 +88,8 @@ jobs:
         with:
           version: v1.60.3
           args: --timeout=5m
+          skip-cache: true
+          skip-save-cache: true
 
   security:
     name: Security Scan
