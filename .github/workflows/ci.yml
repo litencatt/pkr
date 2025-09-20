@@ -117,7 +117,7 @@ jobs:
   format:
     name: Format
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
 
     steps:
       - name: Checkout code
@@ -133,7 +133,6 @@ jobs:
       - name: Install formatters
         run: |
           npm install -g prettier@3.3.3
-          npm install -g @prettier/plugin-yaml@1.0.1
 
       - name: Format Markdown files
         run: |
