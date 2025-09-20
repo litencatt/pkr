@@ -25,10 +25,10 @@ func (d Deck) Len() int {
 
 func (d Deck) Shuffle() {
 	for i := len(d) - 1; i > 0; i-- {
-		// crypto/randを使用してセキュアな乱数を生成
+		// Generate secure random number using crypto/rand
 		j, err := rand.Int(rand.Reader, big.NewInt(int64(i+1)))
 		if err != nil {
-			// crypto/randが失敗した場合は何もしない（シャッフルなし）
+			// Do nothing if crypto/rand fails (no shuffle)
 			return
 		}
 		d[i], d[j.Int64()] = d[j.Int64()], d[i]
