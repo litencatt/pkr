@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.2.0](https://github.com/litencatt/pkr/compare/v0.1.1...v0.2.0) - 2025-09-20
+- Improve cli display info by @litencatt in https://github.com/litencatt/pkr/pull/33
+- Add .md, .yaml auto format in CI by @litencatt in https://github.com/litencatt/pkr/pull/35
+
 ## [v0.1.1](https://github.com/litencatt/pkr/compare/v0.1.0...v0.1.1) - 2025-09-20
 
 - Add how to play by @litencatt in https://github.com/litencatt/pkr/pull/31
