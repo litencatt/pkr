@@ -24,3 +24,6 @@ go.work
 pkr
 tmp/
 dist/
+
+# ai agent
+.claude/
