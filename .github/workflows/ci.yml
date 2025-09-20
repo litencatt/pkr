@@ -113,3 +113,56 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: gosec.sarif
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install formatters
+        run: |
+          npm install -g prettier@3.3.3
+
+      - name: Format Markdown files
+        run: |
+          prettier --write "**/*.md" || true
+
+      - name: Format YAML files
+        run: |
+          prettier --write "**/*.yml" "**/*.yaml" || true
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes (with PAT to trigger CI)
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add .
+          git commit -m "Auto-format markdown and yaml files
+
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push origin ${{ github.head_ref }}
