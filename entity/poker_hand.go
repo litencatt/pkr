@@ -234,9 +234,9 @@ func isStraight(hand []Trump) bool {
 	})
 
 	// Check for Ace-low straight (A, 2, 3, 4, 5)
-	if sortedHand[0].Rank == Two && sortedHand[1].Rank == Three && 
-	   sortedHand[2].Rank == Four && sortedHand[3].Rank == Five && 
-	   sortedHand[4].Rank == Ace {
+	if sortedHand[0].Rank == Two && sortedHand[1].Rank == Three &&
+		sortedHand[2].Rank == Four && sortedHand[3].Rank == Five &&
+		sortedHand[4].Rank == Ace {
 		return true
 	}
 
@@ -256,7 +256,7 @@ func isRoyalFlush(hand []Trump) bool {
 	if len(hand) != 5 {
 		return false
 	}
-	
+
 	requiredRanks := map[Rank]bool{
 		Ten:   false,
 		Jack:  false,
@@ -264,7 +264,7 @@ func isRoyalFlush(hand []Trump) bool {
 		King:  false,
 		Ace:   false,
 	}
-	
+
 	for _, card := range hand {
 		if _, exists := requiredRanks[card.Rank]; exists {
 			requiredRanks[card.Rank] = true
@@ -272,14 +272,14 @@ func isRoyalFlush(hand []Trump) bool {
 			return false
 		}
 	}
-	
+
 	// Check if all required ranks are present
 	for _, present := range requiredRanks {
 		if !present {
 			return false
 		}
 	}
-	
+
 	return true
 }
 
