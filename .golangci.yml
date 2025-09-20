@@ -28,11 +28,6 @@ linters-settings:
     # put imports beginning with prefix after 3rd-party packages
     local-prefixes: github.com/litencatt/pkr
 
-  gosec:
-    # Exclude G404 (weak random number generator) for card shuffling
-    excludes:
-      - G404
-
 
   revive:
     # minimal confidence for issues, default is 0.8

@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"math/rand"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 type Deck []Trump
@@ -24,10 +24,15 @@ func (d Deck) Len() int {
 }
 
 func (d Deck) Shuffle() {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	r.Shuffle(len(d), func(i, j int) {
-		d[i], d[j] = d[j], d[i]
-	})
+	for i := len(d) - 1; i > 0; i-- {
+		// crypto/randを使用してセキュアな乱数を生成
+		j, err := rand.Int(rand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			// crypto/randが失敗した場合は何もしない（シャッフルなし）
+			return
+		}
+		d[i], d[j.Int64()] = d[j.Int64()], d[i]
+	}
 }
 
 func (d *Deck) Draw(n int) []Trump {
