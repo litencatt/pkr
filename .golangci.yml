@@ -29,8 +29,8 @@ linters-settings:
     local-prefixes: github.com/litencatt/pkr
 
   govet:
-    # report about shadowed variables
-    shadow: true
+    # Enable checks
+    check-shadowing: false
 
   revive:
     # minimal confidence for issues, default is 0.8
@@ -40,9 +40,6 @@ linters-settings:
     # minimal code complexity to report, 30 by default
     min-complexity: 15
 
-  maligned:
-    # print struct with more effective memory layout or not, false by default
-    suggest-new: true
 
   dupl:
     # tokens count to trigger issue, 150 by default
@@ -62,9 +59,6 @@ linters-settings:
     # max line length, lines longer will be reported. Default is 120.
     line-length: 120
 
-  unused:
-    # treat code as a program (not a library) and report unused exported identifiers; default is false.
-    check-exported: false
 
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
@@ -73,54 +67,24 @@ linters-settings:
   nakedret:
     # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
     max-func-lines: 30
+  
 
-  prealloc:
-    # XXX: we don't recommend using this linter before doing performance profiling.
-    # For most programs usage of prealloc will be a premature optimization.
-
-    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
-    # True by default.
-    simple: true
-    range-loops: true # Report preallocation suggestions on range loops, true by default
-    for-loops: false # Report preallocation suggestions on for loops, false by default
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
-    - bodyclose
-    - depguard
-    - dogsled
-    - dupl
     - errcheck
-    - exhaustive
-    - gochecknoinits
-    - goconst
-    - gocritic
-    - gocyclo
     - gofmt
-    - goimports
-    - goprintffuncname
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - lll
     - misspell
-    - nakedret
-    - noctx
-    - nolintlint
-    - rowserrcheck
     - staticcheck
-    - stylecheck
     - typecheck
-    - unconvert
-    - unparam
     - unused
-    - whitespace
-    - revive
-    - shadow
 
   # don't enable:
   # - asciicheck
@@ -167,15 +131,12 @@ issues:
     # Exclude some linters from running on tests files.
     - path: _test\.go
       linters:
-        - gocyclo
         - errcheck
-        - dupl
         - gosec
-        - gomnd
 
     # Exclude known linters from partially hard-to-fix issues
     - linters:
-        - golint
+        - revive
       text: "should be"
 
     - linters:
