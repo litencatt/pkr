@@ -71,10 +71,10 @@ func TestTrumpGetRankNumber(t *testing.T) {
 		card Trump
 		want int
 	}{
-		{"Ace", Trump{Rank: Ace}, 11},
-		{"King", Trump{Rank: King}, 10},
-		{"Queen", Trump{Rank: Queen}, 10},
-		{"Jack", Trump{Rank: Jack}, 10},
+		{"Ace", Trump{Rank: Ace}, 14},
+		{"King", Trump{Rank: King}, 13},
+		{"Queen", Trump{Rank: Queen}, 12},
+		{"Jack", Trump{Rank: Jack}, 11},
 		{"Ten", Trump{Rank: Ten}, 10},
 		{"Nine", Trump{Rank: Nine}, 9},
 		{"Two", Trump{Rank: Two}, 2},

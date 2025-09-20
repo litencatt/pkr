@@ -144,15 +144,15 @@ func TestPokerRoundGetSelectCardsRankTotal(t *testing.T) {
 	round := NewPokerRound(deck, 4, 3, 300)
 
 	round.SelectedCards = []Trump{
-		{Suit: Spades, Rank: Ace},     // 11
-		{Suit: Hearts, Rank: King},    // 10
-		{Suit: Diamonds, Rank: Queen}, // 10
-		{Suit: Clubs, Rank: Jack},     // 10
+		{Suit: Spades, Rank: Ace},     // 14
+		{Suit: Hearts, Rank: King},    // 13
+		{Suit: Diamonds, Rank: Queen}, // 12
+		{Suit: Clubs, Rank: Jack},     // 11
 		{Suit: Spades, Rank: Nine},    // 9
 	}
 
 	total := round.GetSelectCardsRankTotal()
-	expectedTotal := 11 + 10 + 10 + 10 + 9
+	expectedTotal := 14 + 13 + 12 + 11 + 9 // Ace + King + Queen + Jack + Nine
 	if total != expectedTotal {
 		t.Errorf("GetSelectCardsRankTotal() = %d, want %d", total, expectedTotal)
 	}
