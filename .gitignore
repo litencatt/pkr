@@ -27,3 +27,7 @@ dist/
 
 # ai agent
 .claude/
+
+# Security scan artifacts
+*.sarif
+coverage.html

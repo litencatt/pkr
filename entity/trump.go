@@ -7,25 +7,25 @@ type Rank string
 
 const (
 	Clubs    Suit = "Clubs"
-	Diamonds      = "Diamonds"
-	Hearts        = "Hearts"
-	Spades        = "Spades"
+	Diamonds Suit = "Diamonds"
+	Hearts   Suit = "Hearts"
+	Spades   Suit = "Spades"
 )
 
 const (
 	Two   Rank = "2"
-	Three      = "3"
-	Four       = "4"
-	Five       = "5"
-	Six        = "6"
-	Seven      = "7"
-	Eight      = "8"
-	Nine       = "9"
-	Ten        = "T"
-	Jack       = "J"
-	Queen      = "Q"
-	King       = "K"
-	Ace        = "A"
+	Three Rank = "3"
+	Four  Rank = "4"
+	Five  Rank = "5"
+	Six   Rank = "6"
+	Seven Rank = "7"
+	Eight Rank = "8"
+	Nine  Rank = "9"
+	Ten   Rank = "T"
+	Jack  Rank = "J"
+	Queen Rank = "Q"
+	King  Rank = "K"
+	Ace   Rank = "A"
 )
 
 type Trump struct {
