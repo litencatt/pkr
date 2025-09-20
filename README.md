@@ -1,67 +1,117 @@
 # Poker CLI
 
 [![CI](https://github.com/litencatt/pkr/actions/workflows/ci.yml/badge.svg)](https://github.com/litencatt/pkr/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/litencatt/pkr/branch/main/graph/badge.svg)](https://codecov.io/gh/litencatt/pkr)
 
-Go言語で実装されたコマンドライン版ポーカーゲームです。
+A command-line poker game implemented in Go.
 
-## 機能
+## Features
 
-- インタラクティブなポーカーゲーム
-- 複数ラウンドのプレイ
-- スコアとマルチプライヤーシステム
-- カードの選択とアクション（Play/Discard/Cancel）
+- Interactive poker game
+- Multiple rounds of play
+- Score and multiplier system
+- Card selection and actions (Play/Discard/Cancel)
 
-## 開発環境
+## How to Play
 
-本プロジェクトはDocker Composeを使用した開発環境をサポートしています。
+### Starting the Game
 
-### 必要なソフトウェア
+```bash
+# Normal mode
+./pkr run
+
+# Debug mode (shows detailed card information)
+./pkr run -d
+```
+
+### Game Flow
+
+1. **Game Start**: The game begins with 5 cards dealt to you
+2. **Card Selection**: Review your cards and choose which cards to play
+3. **Action Selection**: For each card, choose from the following actions:
+
+   - **Play**: Play the card and evaluate it as part of a poker hand
+   - **Discard**: Discard the card (no effect on score)
+   - **Cancel**: Cancel the selection
+
+4. **Hand Evaluation**: Played cards are evaluated as poker hands and score is added
+5. **Next Round**: After the round ends, proceed to the next round
+
+### Poker Hands
+
+The following poker hands are recognized (in order of strength):
+
+- **Royal Flush**: A-K-Q-J-10 of the same suit
+- **Straight Flush**: Five consecutive cards of the same suit
+- **Four of a Kind**: Four cards of the same rank
+- **Full House**: Three of a kind plus a pair
+- **Flush**: Five cards of the same suit
+- **Straight**: Five consecutive cards (any suit)
+- **Three of a Kind**: Three cards of the same rank
+- **Two Pair**: Two pairs of cards
+- **One Pair**: Two cards of the same rank
+- **High Card**: Any other combination
+
+### Scoring
+
+- Each poker hand has a unique score value
+- Stronger hands yield higher scores
+- The multiplier system provides bonus scores for consecutive hands
+
+### Game End
+
+- Play the set number of rounds or manually end the game
+- Final score is displayed when the game ends
+
+## Development Environment
+
+This project supports a development environment using Docker Compose.
+
+### Required Software
 
 - Docker
 - Docker Compose
 - Make
 
-### セットアップ
+### Setup
 
 ```bash
-# 開発環境の起動
+# Start development environment
 docker compose up -d
 
-# アプリケーションのビルド
+# Build application
 docker compose exec app make build
 
-# テストの実行
+# Run tests
 docker compose exec app go test ./...
 
-# リンターの実行
+# Run linter
 docker compose exec app golangci-lint run
 
-# アプリケーションの実行
+# Run application
 docker compose exec app ./pkr
 ```
 
 ## CI/CD
 
-GitHub Actionsを使用して以下の自動化を行っています：
+The following automation is performed using GitHub Actions:
 
-- **テスト**: 単体テストの実行とカバレッジ測定
-- **リント**: golangci-lintによるコード品質チェック
-- **セキュリティスキャン**: gosecによる脆弱性検査
-- **ビルド**: アプリケーションのビルド検証
+- **Testing**: Unit test execution and coverage measurement
+- **Linting**: Code quality checks with golangci-lint
+- **Security Scanning**: Vulnerability detection with gosec
+- **Build**: Application build verification
 
-## プロジェクト構成
+## Project Structure
 
 ```
 .
-├── cmd/pkr/          # メインアプリケーション
-├── entity/           # ドメインエンティティ
-├── service/          # ビジネスロジック
-├── .github/workflows/ # CI/CD設定
-├── docker-compose.yml # 開発環境設定
-└── Makefile         # ビルドタスク
+├── cmd/pkr/          # Main application
+├── entity/           # Domain entities
+├── service/          # Business logic
+├── .github/workflows/ # CI/CD configuration
+├── docker-compose.yml # Development environment configuration
+└── Makefile         # Build tasks
 ```
 
-## ライセンス
+## License
 
 MIT License
