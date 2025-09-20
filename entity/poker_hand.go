@@ -250,6 +250,38 @@ func isStraight(hand []Trump) bool {
 	return true
 }
 
+// isRoyalFlush checks if the hand is a Royal Flush (10, J, Q, K, A).
+func isRoyalFlush(hand []Trump) bool {
+	if len(hand) != 5 {
+		return false
+	}
+	
+	requiredRanks := map[Rank]bool{
+		Ten:   false,
+		Jack:  false,
+		Queen: false,
+		King:  false,
+		Ace:   false,
+	}
+	
+	for _, card := range hand {
+		if _, exists := requiredRanks[card.Rank]; exists {
+			requiredRanks[card.Rank] = true
+		} else {
+			return false
+		}
+	}
+	
+	// Check if all required ranks are present
+	for _, present := range requiredRanks {
+		if !present {
+			return false
+		}
+	}
+	
+	return true
+}
+
 // groupByRank groups cards by their ranks and returns a map of rank to count.
 func groupByRank(hand []Trump) map[Rank]int {
 	rankCount := make(map[Rank]int)
@@ -265,7 +297,8 @@ func EvaluateHand(hand []Trump) HandType {
 	isStraight := isStraight(hand)
 
 	if isFlush && isStraight {
-		if hand[0].Rank == Ten {
+		// Check for Royal Flush (10, J, Q, K, A)
+		if isRoyalFlush(hand) {
 			return RoyalFlush
 		}
 		return StraightFlush
