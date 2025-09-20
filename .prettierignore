@@ -36,6 +36,9 @@ Thumbs.db
 # Git
 .git/
 
+# GitHub workflows (cannot be modified by GITHUB_TOKEN)
+.github/workflows/
+
 # Temporary files
 tmp/
 temp/
