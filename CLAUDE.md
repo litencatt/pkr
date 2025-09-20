@@ -85,10 +85,45 @@ make release     # Create and push git tag, run goreleaser
 - Interactive UI uses Survey library for card selection and action prompts
 - Terminal clearing is OS-specific (Linux/Darwin supported)
 
+## Agentic Coding Development Guidelines
+
+### Git Commit Strategy
+- 変更毎に意味のあるコミットを作成する
+- 各機能追加や改善は独立したコミットとして管理
+- コミットメッセージは変更内容を明確に記述
+- 段階的な開発でも各ステップをコミットして進捗を追跡可能にする
+
+### Development Process
+- 大きな機能は小さな単位に分割して実装
+- 各段階で動作確認とコミットを実行
+- リファクタリングと機能追加は分離してコミット
+- エラーや問題が発生した場合は前のコミットに戻りやすくする
+
+### Code Quality Assurance
+- **コード修正完了後は必ずテストを実行する**
+  ```bash
+  # すべてのテストを実行
+  docker compose exec app go test ./...
+  
+  # 詳細なテスト結果を確認
+  docker compose exec app go test -v ./...
+  ```
+- **ビルドが成功することを確認する**
+  ```bash
+  docker compose exec app make build
+  ```
+- **コード品質チェックを実行する**
+  ```bash
+  docker compose exec app go fmt ./...  # フォーマット
+  docker compose exec app go vet ./...  # 静的解析
+  ```
+- テスト失敗やビルドエラーが発生した場合は修正してからコミット
+- フォーマット変更があった場合は追加のコミットとして記録
+
 ## Important Notes
 
 - Docker Compose環境（Go 1.22-bullseye）を使用してすべての開発作業を行う
-- No test files currently exist in the project
+- Entity層とService層にテストファイルが存在（*_test.go）
 - Debug mode controlled via `-d` flag shows card details during gameplay
 - Config file support via Viper (default: `$HOME/.pkr.yaml`)
 - Version information embedded at build time via ldflags
